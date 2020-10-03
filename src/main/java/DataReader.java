@@ -3,15 +3,16 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import utils.Utilities;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ReadDataBase extends Utilities {
-
+public class DataReader {
   // read json type file and setup random localisation for given number of locations
-  public List<String> read2(int numberOfLocation) {
+  public List<String> readFormattedJsonFile(int numberOfLocation) {
     List<Integer> ex = new ArrayList<>();
     List<String> coordinates = new ArrayList<>();
     try (FileReader reader = new FileReader("src\\main\\resources\\localisation.json")) {
@@ -26,6 +27,7 @@ public class ReadDataBase extends Utilities {
       for (int i = 0; i < numberOfLocation; i++) {
         coordinates.add(obj.get(ex.get(i)).toString());
       }
+      // TODO log exception
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     } catch (IOException e) {
@@ -33,12 +35,12 @@ public class ReadDataBase extends Utilities {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-
+    // return coordinates in format (long,lat)
     return coordinates;
   }
 
   // read and parse pure json file with cities
-  public List<String> read() {
+  public List<String> readUnformattedJsonFile() {
     JSONParser jsonParser = new JSONParser();
     List<String> coordinates = new ArrayList<>();
     try (FileReader reader = new FileReader("src\\main\\resources\\cities.json")) {
@@ -50,6 +52,7 @@ public class ReadDataBase extends Utilities {
         JSONObject ar2 = (JSONObject) ar.get("geometry");
         coordinates.add(ar2.get("coordinates").toString());
       }
+      // TODO log exception
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     } catch (IOException e) {
@@ -57,6 +60,7 @@ public class ReadDataBase extends Utilities {
     } catch (ParseException e) {
       e.printStackTrace();
     }
+    // return whole json file
     return coordinates;
   }
   // write json file

@@ -1,37 +1,41 @@
-import io.restassured.http.Method;
 import io.restassured.response.Response;
+import utils2.ResponseUtils;
+import utils.Utilities;
+
 import java.util.*;
 
-public class Main extends Client {
+public class Main {
+  private static final int QUANTITY_OF_POINTS = 2;
+
   public static void main(String[] args) {
 
-    DataProvider dataProvider = new DataProvider();
-
-    // Map<String,String> requestData=new HashMap(dataProvider.mergeRequestData());//create request
-    // form
-    Map<String, String> requestData = new HashMap<>();
+    LocationPoint locationPoint;
     Client client = new Client();
-    client.setUpConstants();
-    Utilities utilities= new Utilities();
+    Utilities utilities = new Utilities();
     // Response response=client.sendRequest(Method.GET,requestData);//send request
 
     // dataProvider.jsonResponseData(response);//do function inside->show calculated results
 
-    ReadDataBase readDataBase = new ReadDataBase(); // read data base from file
+    DataReader dataReader = new DataReader(); // read data base from file
     // System.out.println(readDataBase.read()); all filles
+    List<Double> cDistance = new ArrayList<>();
+    // set how many random place we want. Must be product of 2
+    List<String> points = dataReader.readFormattedJsonFile(QUANTITY_OF_POINTS);
+    for (int i = 0; i < QUANTITY_OF_POINTS; i = i + 2) {
+      client.setUpWayPoints(points.get(i), points.get(i + 1)); // set up pair of points
+      Response response = client.sendRequest(); // send request with given query parameters
 
-    double dist;
-int quantityOfPoints=2; // set how many random place we want. Must be product of 2
-    List<String> points = readDataBase.read2(quantityOfPoints);
-    for (int i = 0; i < quantityOfPoints; i = i + 2) {
-      client.setUpConstants(); // set up default constants
-      requestData = new HashMap(dataProvider.setUpWayPoints(points.get(i), points.get(i + 1))); // set up pair of points
-      Response response = client.sendRequest(Method.GET, requestData); // send request with given query parameters
-        utilities.countryDistance(response);
+      ResponseUtils.getLocationPoint(response);
+      // utils.DataProvider dataProvider = new utils.DataProvider(response);
+      // cDistance = dataProvider.countryDistance();
+      locationPoint = ResponseUtils.getLocationPoint(response);
 
+      CalculateP2PDistance calculateP2PDistance = new CalculateP2PDistance(locationPoint);
+      Map<Double, Double> newCalculatedCoordinates =
+          new CalculateCoordinates().positionFromCar(calculateP2PDistance.calculateDistance());
 
-     dist= dataProvider.jsonResponseData(response); // with given response calculate proper ponts and distance
-
+      // System.out.println(calculateCoordinates.positionFromCar());
+      // utilities.countryDistance(response);
     }
   }
 }
