@@ -1,7 +1,8 @@
+package Calculation;
+
 import org.gavaghan.geodesy.Ellipsoid;
 import org.gavaghan.geodesy.GeodeticCalculator;
 import org.gavaghan.geodesy.GlobalCoordinates;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +18,6 @@ public class CalculateCoordinates {
         locationPoint.getPointLatitude().get(0), locationPoint.getPointLongitude().get(0));
     positionAfterParameterLat.add(locationPoint.getPointLatitude().get(0));
     positionAfterParameterLong.add(locationPoint.getPointLongitude().get(0));
-    Map<Double, Double> startingPoints = new HashMap<>();
     double sDistance = 0;
     double cDist = 0;
     double cAng;
@@ -72,17 +72,11 @@ public class CalculateCoordinates {
             locationPoint.getPointLatitude().get(locationPoint.getPointDistance().size()));
         positionAfterParameterLong.add(
             locationPoint.getPointLongitude().get(locationPoint.getPointDistance().size()));
-
-        //                positionAfterParameter.put(posLat.get(posLat.size() - 1),
-        // posLong.get(posLong.size() - 1));
-        //                positionAfterParameterLat.add(posLat.get(posLat.size() - 1));
-        //                positionAfterParameterLong.add(posLong.get(posLong.size() - 1));
       }
     }
     for (int i = 0; i < positionAfterParameterLat.size(); i++) {
       String coordinates =
           positionAfterParameterLat.get(i) + "," + positionAfterParameterLong.get(i) + ";";
-      //  System.out.println(coordinates);
     }
     return positionAfterParameter;
   }
