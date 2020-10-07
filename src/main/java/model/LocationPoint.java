@@ -1,4 +1,5 @@
-package Calculation;
+package model;
+
 import java.util.List;
 
 public class LocationPoint {

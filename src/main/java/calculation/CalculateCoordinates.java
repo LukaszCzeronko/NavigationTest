@@ -1,23 +1,27 @@
-package Calculation;
+package calculation;
 
+import lombok.extern.slf4j.Slf4j;
+import model.LocationPoint;
 import org.gavaghan.geodesy.Ellipsoid;
 import org.gavaghan.geodesy.GeodeticCalculator;
 import org.gavaghan.geodesy.GlobalCoordinates;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class CalculateCoordinates {
-  public Map<Double, Double> positionFromCar(LocationPoint locationPoint) {
-
-    Map<Double, Double> positionAfterParameter = new HashMap<>();
-    List<Double> positionAfterParameterLat = new ArrayList<>();
-    List<Double> positionAfterParameterLong = new ArrayList<>();
-    positionAfterParameter.put(
+  public List<String> positionFromCar(LocationPoint locationPoint) {
+    List<String> resultsCoordinates = new ArrayList<>();
+    Map<Double, Double> newCalculatedCoordinates = new HashMap<>();
+    List<Double> newCalculatedLat = new ArrayList<>();
+    List<Double> newCalculatedLong = new ArrayList<>();
+    newCalculatedCoordinates.put(
         locationPoint.getPointLatitude().get(0), locationPoint.getPointLongitude().get(0));
-    positionAfterParameterLat.add(locationPoint.getPointLatitude().get(0));
-    positionAfterParameterLong.add(locationPoint.getPointLongitude().get(0));
+    newCalculatedLat.add(locationPoint.getPointLatitude().get(0));
+    newCalculatedLong.add(locationPoint.getPointLongitude().get(0));
     double sDistance = 0;
     double cDist = 0;
     double cAng;
@@ -43,10 +47,10 @@ public class CalculateCoordinates {
         sDistance = 0;
         locationPoint.getPointLatitude().set(i - 1, dest.getLatitude());
         locationPoint.getPointLongitude().set(i - 1, dest.getLongitude());
-        positionAfterParameter.put(
+        newCalculatedCoordinates.put(
             locationPoint.getPointLatitude().get(i), locationPoint.getPointLongitude().get(i));
-        positionAfterParameterLat.add(locationPoint.getPointLatitude().get(i));
-        positionAfterParameterLong.add((locationPoint.getPointLongitude().get(i)));
+        newCalculatedLat.add(locationPoint.getPointLatitude().get(i));
+        newCalculatedLong.add((locationPoint.getPointLongitude().get(i)));
         --i;
       } else if ((i + 1) >= locationPoint.getPointDistance().size()) {
         GeodeticCalculator geoCalc = new GeodeticCalculator();
@@ -55,29 +59,28 @@ public class CalculateCoordinates {
         cAng = locationPoint.getPointAzimuth().get(i);
         startPoint =
             new GlobalCoordinates(
-                positionAfterParameterLat.get(positionAfterParameterLat.size() - 1),
-                positionAfterParameterLong.get(positionAfterParameterLong.size() - 1));
+                newCalculatedLat.get(newCalculatedLat.size() - 1),
+                newCalculatedLong.get(newCalculatedLong.size() - 1));
         double[] endBearing = new double[1];
         GlobalCoordinates dest =
             geoCalc.calculateEndingGlobalCoordinates(
                 reference, startPoint, cAng, sDistance, endBearing);
-
         locationPoint.getPointLatitude().set(i - 1, dest.getLatitude());
         locationPoint.getPointLongitude().set(i - 1, dest.getLongitude());
-
-        positionAfterParameter.put(
+        newCalculatedCoordinates.put(
             locationPoint.getPointLatitude().get(locationPoint.getPointDistance().size()),
             locationPoint.getPointLongitude().get(locationPoint.getPointDistance().size()));
-        positionAfterParameterLat.add(
+        newCalculatedLat.add(
             locationPoint.getPointLatitude().get(locationPoint.getPointDistance().size()));
-        positionAfterParameterLong.add(
+        newCalculatedLong.add(
             locationPoint.getPointLongitude().get(locationPoint.getPointDistance().size()));
       }
     }
-    for (int i = 0; i < positionAfterParameterLat.size(); i++) {
-      String coordinates =
-          positionAfterParameterLat.get(i) + "," + positionAfterParameterLong.get(i) + ";";
+    for (int i = 0; i < newCalculatedLat.size(); i++) {
+      String coordinates = newCalculatedLat.get(i) + "," + newCalculatedLong.get(i);
+      resultsCoordinates.add(coordinates);
     }
-    return positionAfterParameter;
+    return resultsCoordinates;
+    // return newCalculatedCoordinates;
   }
 }

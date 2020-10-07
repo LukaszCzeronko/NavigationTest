@@ -1,14 +1,12 @@
 package http;
 
-import groovy.util.logging.Slf4j;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -19,7 +17,6 @@ import static utils.Utilities.splitAndRevertString;
 
 @Slf4j
 public class Client {
-  Logger logger=LoggerFactory.getLogger(Client.class);
   private Map<String, String> baseQueryParameters = new HashMap<String, String>();
   private String baseURI;
   private String basePath;
@@ -37,12 +34,13 @@ public class Client {
     RestAssured.basePath = this.basePath;
     setUpBaseQueryParameters();
   }
+
   public void setUpWayPoints(String... point) {
     System.out.println(point.length);
-    for(int i=0;i<point.length;i++){
-    point[i] = point[i].replaceAll("\\[", "").replaceAll("\\]", "");
-    point[i]=splitAndRevertString(point[i]);
-      this.baseQueryParameters.put("waypoint"+i, "geo!stopOver!"+point[i]);
+    for (int i = 0; i < point.length; i++) {
+      point[i] = point[i].replaceAll("\\[", "").replaceAll("\\]", "");
+      point[i] = splitAndRevertString(point[i]);
+      this.baseQueryParameters.put("waypoint" + i, "geo!stopOver!" + point[i]);
     }
   }
 
@@ -69,8 +67,8 @@ public class Client {
     Response response = newRequestSpecification.request(Method.GET);
     String requestDetails = new String(requestOutputStream.toByteArray());
     String responseDetails = new String(responseOutputStream.toByteArray());
-    logger.info("request details: {}",requestDetails);
-    //logger.info("response details: {}",responseDetails);
+    log.info("request details: {}", requestDetails);
+    // log.info("response details: {}",responseDetails);
     return response;
   }
 }

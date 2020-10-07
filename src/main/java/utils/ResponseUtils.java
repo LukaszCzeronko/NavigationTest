@@ -1,6 +1,8 @@
-package Calculation;
+package utils;
 
 import io.restassured.response.Response;
+import model.LocationPoint;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
