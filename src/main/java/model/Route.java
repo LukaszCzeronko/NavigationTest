@@ -10,9 +10,4 @@ public class Route {
   private double length;
   private String units;
   private List<Location> location;
-
-  @Data
-  private class Location {
-    private double latitude, longitude;
-  }
 }

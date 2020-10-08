@@ -56,7 +56,6 @@ public class DataReader {
         JSONObject ar2 = (JSONObject) ar.get("geometry");
         coordinates.add(ar2.get("coordinates").toString());
       }
-      // TODO log exception
     } catch (FileNotFoundException e) {
       log.error("An error occurred.", e);
     } catch (IOException e) {
@@ -70,10 +69,8 @@ public class DataReader {
   // write json file
   public void writeFile(List<String> json) {
     String jsonString = new Gson().toJson(json);
-    try {
-      FileWriter myWriter = new FileWriter("localisation.json");
-      myWriter.write(jsonString);
-      myWriter.close();
+    try (FileWriter myWriter = new FileWriter("writeTest.json")) {
+      myWriter.write(json.toString());
       log.info("Successfully wrote to the file.");
     } catch (IOException e) {
       log.error("An error occurred.", e);
