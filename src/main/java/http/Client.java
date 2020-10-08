@@ -1,10 +1,13 @@
+package http;
+
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.testng.annotations.BeforeClass;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
@@ -12,6 +15,7 @@ import java.util.Map;
 
 import static utils.Utilities.splitAndRevertString;
 
+@Slf4j
 public class Client {
   private Map<String, String> baseQueryParameters = new HashMap<String, String>();
   private String baseURI;
@@ -30,14 +34,14 @@ public class Client {
     RestAssured.basePath = this.basePath;
     setUpBaseQueryParameters();
   }
-  // TODO string ...
-  public void setUpWayPoints(String point0, String point1) {
-    point0 = point0.replaceAll("\\[", "").replaceAll("\\]", "");
-    point1 = point1.replaceAll("\\[", "").replaceAll("\\]", "");
-    point0 = splitAndRevertString(point0);
-    point1 = splitAndRevertString(point1);
-    this.baseQueryParameters.put("waypoint0", "geo!stopOver!" + point0);
-    this.baseQueryParameters.put("waypoint1", "geo!stopOver!" + point1);
+
+  public void setUpWayPoints(String... point) {
+    System.out.println(point.length);
+    for (int i = 0; i < point.length; i++) {
+      point[i] = point[i].replaceAll("\\[", "").replaceAll("\\]", "");
+      point[i] = splitAndRevertString(point[i]);
+      this.baseQueryParameters.put("waypoint" + i, "geo!stopOver!" + point[i]);
+    }
   }
 
   public void setUpBaseQueryParameters() {
@@ -63,8 +67,8 @@ public class Client {
     Response response = newRequestSpecification.request(Method.GET);
     String requestDetails = new String(requestOutputStream.toByteArray());
     String responseDetails = new String(responseOutputStream.toByteArray());
-    System.out.println(requestDetails);
-    // System.out.println(responseDetails);
+    log.info("request details: {}", requestDetails);
+    // log.info("response details: {}",responseDetails);
     return response;
   }
 }

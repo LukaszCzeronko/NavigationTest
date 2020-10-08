@@ -1,15 +1,21 @@
+package reader;
+
 import com.google.gson.Gson;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import utils.Utilities;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@Slf4j
 public class DataReader {
   // read json type file and setup random localisation for given number of locations
   public List<String> readFormattedJsonFile(int numberOfLocation) {
@@ -27,13 +33,12 @@ public class DataReader {
       for (int i = 0; i < numberOfLocation; i++) {
         coordinates.add(obj.get(ex.get(i)).toString());
       }
-      // TODO log exception
     } catch (FileNotFoundException e) {
-      e.printStackTrace();
+      log.error("An error occurred.", e);
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error("An error occurred.", e);
     } catch (ParseException e) {
-      e.printStackTrace();
+      log.error("An error occurred.", e);
     }
     // return coordinates in format (long,lat)
     return coordinates;
@@ -41,7 +46,6 @@ public class DataReader {
 
   // read and parse pure json file with cities
   public List<String> readUnformattedJsonFile() {
-    JSONParser jsonParser = new JSONParser();
     List<String> coordinates = new ArrayList<>();
     try (FileReader reader = new FileReader("src\\main\\resources\\cities.json")) {
       JSONParser parser = new JSONParser();
@@ -52,13 +56,12 @@ public class DataReader {
         JSONObject ar2 = (JSONObject) ar.get("geometry");
         coordinates.add(ar2.get("coordinates").toString());
       }
-      // TODO log exception
     } catch (FileNotFoundException e) {
-      e.printStackTrace();
+      log.error("An error occurred.", e);
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error("An error occurred.", e);
     } catch (ParseException e) {
-      e.printStackTrace();
+      log.error("An error occurred.", e);
     }
     // return whole json file
     return coordinates;
@@ -66,14 +69,11 @@ public class DataReader {
   // write json file
   public void writeFile(List<String> json) {
     String jsonString = new Gson().toJson(json);
-    try {
-      FileWriter myWriter = new FileWriter("localisation.json");
-      myWriter.write(jsonString);
-      myWriter.close();
-      System.out.println("Successfully wrote to the file.");
+    try (FileWriter myWriter = new FileWriter("route.json")) {
+      myWriter.write(json.toString());
+      log.info("Successfully wrote to the file.");
     } catch (IOException e) {
-      System.out.println("An error occurred.");
-      e.printStackTrace();
+      log.error("An error occurred.", e);
     }
   }
 }
