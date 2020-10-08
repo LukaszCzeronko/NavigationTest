@@ -16,8 +16,7 @@ import java.util.Map;
 public class CalculateCoordinates {
   public List<Location> positionFromCar(LocationPoint locationPoint) {
     Location location;
-    List<Location> coordinatesObject = new ArrayList<>();
-    List<String> resultsCoordinates = new ArrayList<>();
+    List<Location> resultsCoordinates = new ArrayList<>();
     Map<Double, Double> newCalculatedCoordinates = new HashMap<>();
     List<Double> newCalculatedLat = new ArrayList<>();
     List<Double> newCalculatedLong = new ArrayList<>();
@@ -77,17 +76,14 @@ public class CalculateCoordinates {
             locationPoint.getPointLatitude().get(locationPoint.getPointDistance().size()));
         newCalculatedLong.add(
             locationPoint.getPointLongitude().get(locationPoint.getPointDistance().size()));
-        ;
       }
     }
     for (int i = 0; i < newCalculatedLat.size(); i++) {
-      String coordinates = newCalculatedLat.get(i) + "," + newCalculatedLong.get(i);
-      resultsCoordinates.add(coordinates);
       location = new Location();
       location.setLatitude(newCalculatedLat.get(i));
       location.setLongitude(newCalculatedLong.get(i));
-      coordinatesObject.add(location);
+      resultsCoordinates.add(location);
     }
-    return coordinatesObject;
+    return resultsCoordinates;
   }
 }

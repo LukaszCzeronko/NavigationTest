@@ -37,8 +37,8 @@ public class Main {
     route.setId(1);//example of using serializer
     route.setLength(312.2);
     route.setUnits("km");
-    List<String> write = new ArrayList<>();
-    write.add(routeSerializer.serialize(route));
-    dataReader.writeFile(write);
+    List<String> results = new ArrayList<>();
+    results.add(routeSerializer.serialize(route));
+    dataReader.writeFile(results);
   }
 }

@@ -69,7 +69,7 @@ public class DataReader {
   // write json file
   public void writeFile(List<String> json) {
     String jsonString = new Gson().toJson(json);
-    try (FileWriter myWriter = new FileWriter("writeTest.json")) {
+    try (FileWriter myWriter = new FileWriter("route.json")) {
       myWriter.write(json.toString());
       log.info("Successfully wrote to the file.");
     } catch (IOException e) {
