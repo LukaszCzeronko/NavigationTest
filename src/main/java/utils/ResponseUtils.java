@@ -1,13 +1,22 @@
 package utils;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jackson.JsonLoader;
+import com.github.fge.jsonschema.core.exceptions.ProcessingException;
+import com.github.fge.jsonschema.core.report.ProcessingReport;
+import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
 import model.LocationPoint;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class ResponseUtils {
   public static LocationPoint getLocationPoint(Response response) {
     List<Double> posLat = new ArrayList<>();
@@ -54,5 +63,27 @@ public class ResponseUtils {
       flagDistance.put(country, distance);
     }
     return distanceCountry;
+  }
+
+  public static void validateJsonAgainstSchema(String json, String schema) {
+    ObjectMapper objectMapper = new ObjectMapper();
+    // this line will generate JSON schema from your class
+    //        JsonNode schemaNode;
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      JsonNode schemaNode = mapper.readTree(schema);
+      log.info(schemaNode.asText());
+      JsonNode jsonToValidate = JsonLoader.fromString(json);
+      ProcessingReport validate =
+          JsonSchemaFactory.byDefault().getJsonSchema(schemaNode).validate(jsonToValidate);
+      System.out.println("Valid? " + validate.isSuccess());
+      if (validate.isSuccess()) {
+        return;
+      } else {
+        throw new RuntimeException("schema validation failed: " + validate.toString());
+      }
+    } catch (IOException | ProcessingException e) {
+      System.out.println("Problem while while parsing JSON file or schema: " + e.getMessage());
+    }
   }
 }

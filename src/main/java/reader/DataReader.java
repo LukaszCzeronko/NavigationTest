@@ -1,6 +1,5 @@
 package reader;
 
-import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -66,11 +65,25 @@ public class DataReader {
     // return whole json file
     return coordinates;
   }
+
+  public String readSchema(String schemaPath) {
+    JSONObject schema = null;
+    try (FileReader reader = new FileReader(schemaPath)) {
+      JSONParser parser = new JSONParser();
+      schema = (JSONObject) parser.parse(reader);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    return schema.toString();
+  }
   // write json file
-  public void writeFile(List<String> json) {
-    String jsonString = new Gson().toJson(json);
+  public void writeFile(String json) {
     try (FileWriter myWriter = new FileWriter("route.json")) {
-      myWriter.write(json.toString());
+      myWriter.write(json);
       log.info("Successfully wrote to the file.");
     } catch (IOException e) {
       log.error("An error occurred.", e);
