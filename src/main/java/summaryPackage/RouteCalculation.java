@@ -2,6 +2,7 @@ package summaryPackage;
 
 import calculation.CalculateCoordinates;
 import calculation.CalculateP2PDistance;
+import cli.CliProperties;
 import http.Client;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +21,7 @@ import static utils.ResponseUtils.validateJsonAgainstSchema;
 public class RouteCalculation {
   private static final int QUANTITY_OF_POINTS = 2;
 
-  public List<Route> newPoints() {
-
+  public List<Route> newPoints(CliProperties cliProperties) {
     LocationPoint locationPoint;
     Client client = new Client();
     DataReader dataReader = new DataReader(); // read data base from file
@@ -42,8 +42,8 @@ public class RouteCalculation {
           calculateCoordinates.positionFromCar(
               calculateP2PDistance.calculateDistance(locationPoint)));
       route.setId(id);
-      route.setLength(312.2); // TODO replace example value with real route length
-      route.setUnits("km"); // TODO replace with type of units passed from CLI argument/default
+      route.setLength(312.2);
+      route.setUnits("km");
       routes.add(route);
     }
     String results = routeSerializer.serialize(routes);
