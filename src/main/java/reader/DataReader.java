@@ -72,11 +72,11 @@ public class DataReader {
       JSONParser parser = new JSONParser();
       schema = (JSONObject) parser.parse(reader);
     } catch (FileNotFoundException e) {
-      e.printStackTrace();
+      log.error("An error occurred.", e);
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error("An error occurred.", e);
     } catch (ParseException e) {
-      e.printStackTrace();
+      log.error("An error occurred.", e);
     }
     return schema.toString();
   }

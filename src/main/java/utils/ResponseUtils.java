@@ -66,24 +66,19 @@ public class ResponseUtils {
   }
 
   public static void validateJsonAgainstSchema(String json, String schema) {
-    ObjectMapper objectMapper = new ObjectMapper();
-    // this line will generate JSON schema from your class
-    //        JsonNode schemaNode;
     try {
       ObjectMapper mapper = new ObjectMapper();
       JsonNode schemaNode = mapper.readTree(schema);
-      log.info(schemaNode.asText());
       JsonNode jsonToValidate = JsonLoader.fromString(json);
       ProcessingReport validate =
           JsonSchemaFactory.byDefault().getJsonSchema(schemaNode).validate(jsonToValidate);
-      System.out.println("Valid? " + validate.isSuccess());
       if (validate.isSuccess()) {
         return;
       } else {
         throw new RuntimeException("schema validation failed: " + validate.toString());
       }
     } catch (IOException | ProcessingException e) {
-      System.out.println("Problem while while parsing JSON file or schema: " + e.getMessage());
+      log.error("Problem while while parsing JSON file or schema: " + e.getMessage());
     }
   }
 }
