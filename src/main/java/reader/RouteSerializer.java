@@ -5,12 +5,13 @@ import model.Route;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 public class RouteSerializer {
   private ObjectMapper objectMapper = new ObjectMapper();
 
-  public String serialize(Route route) {
+  public String serialize(List<Route> route) {
     String jsonString = "";
     try {
       jsonString = objectMapper.writeValueAsString(route);

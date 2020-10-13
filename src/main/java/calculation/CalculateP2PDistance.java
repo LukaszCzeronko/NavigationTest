@@ -39,10 +39,10 @@ public class CalculateP2PDistance {
       pointDistance.add(p2pKilometers);
       pointAzimuth.add(geoMeasurement.getAzimuth());
       distance = p2pKilometers + distance;
-      if (distance >= (locationPoint.getCountryDistance().get(j) / 1000)) {
+      if (distance >= (locationPoint.getOverallDistance().get(j) / 1000)) {
         distance = 0;
         j = j + 1;
-        if (j == locationPoint.getCountryDistance().size()) {
+        if (j == locationPoint.getOverallDistance().size()) {
           break;
         }
       }

@@ -1,5 +1,8 @@
 package utils;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class Utilities {
   // split and reverse string
   public static String splitAndRevertString(String strToReverse) {
