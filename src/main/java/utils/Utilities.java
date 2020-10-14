@@ -12,4 +12,9 @@ public class Utilities {
     str2 = separated[1] + "," + separated[0];
     return str2;
   }
+
+  public static double calculateStep(double speed, int time) {
+    double distance = speed * (double) time / 3600;
+    return distance;
+  }
 }

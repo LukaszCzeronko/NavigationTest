@@ -6,20 +6,16 @@ public class LocationPoint {
   private List<Double> pointLatitude;
   private List<Double> pointLongitude;
   private List<Double> pointElevation;
-  private List<Double> overallDistance;
+  private double overallDistance;
   private List<Double> pointDistance;
   private List<Double> pointAzimuth;
   private double step;
 
   public LocationPoint(
-      List<Double> pointLatitude,
-      List<Double> pointLongitude,
-      List<Double> pointElevation,
-      List<Double> overallDistance) {
+      List<Double> pointLatitude, List<Double> pointLongitude, List<Double> pointElevation) {
     this.pointLatitude = pointLatitude;
     this.pointLongitude = pointLongitude;
     this.pointElevation = pointElevation;
-    this.overallDistance = overallDistance;
   }
 
   public LocationPoint(
@@ -27,12 +23,14 @@ public class LocationPoint {
       List<Double> pointLongitude,
       List<Double> pointDistance,
       List<Double> pointAzimuth,
-      double step) {
+      double step,
+      double overallDistance) {
     this.pointLatitude = pointLatitude;
     this.pointLongitude = pointLongitude;
     this.pointDistance = pointDistance;
     this.pointAzimuth = pointAzimuth;
     this.step = step;
+    this.overallDistance = overallDistance;
   }
 
   public List<Double> getPointLatitude() {
@@ -59,11 +57,11 @@ public class LocationPoint {
     this.pointElevation = pointElevation;
   }
 
-  public List<Double> getOverallDistance() {
+  public double getOverallDistance() {
     return overallDistance;
   }
 
-  public void setOverallDistance(List<Double> overallDistance) {
+  public void setOverallDistance(double overallDistance) {
     this.overallDistance = overallDistance;
   }
 

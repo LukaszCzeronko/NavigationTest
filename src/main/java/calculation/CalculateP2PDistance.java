@@ -1,5 +1,6 @@
 package calculation;
 
+import cli.Units;
 import lombok.extern.slf4j.Slf4j;
 import model.LocationPoint;
 import org.gavaghan.geodesy.Ellipsoid;
@@ -12,11 +13,12 @@ import java.util.List;
 
 @Slf4j
 public class CalculateP2PDistance {
-  public LocationPoint calculateDistance(LocationPoint locationPoint) {
+  public LocationPoint calculateDistance(
+      LocationPoint locationPoint, double maxRouteLength, Units multiplier, double step) {
     List<Double> pointDistance = new ArrayList<>();
     List<Double> pointAzimuth = new ArrayList<>();
+    locationPoint.setStep(step);
     double distance = 0;
-    int j = 0;
     for (int i = 0; i < (locationPoint.getPointLatitude().size() - 1); i++) {
       GeodeticCalculator geoCalc = new GeodeticCalculator();
       Ellipsoid reference = Ellipsoid.WGS84;
@@ -35,16 +37,13 @@ public class CalculateP2PDistance {
       GeodeticMeasurement geoMeasurement;
       double p2pKilometers;
       geoMeasurement = geoCalc.calculateGeodeticMeasurement(reference, firstPoint, secondPoint);
-      p2pKilometers = geoMeasurement.getPointToPointDistance() / 1000.0;
+      p2pKilometers = geoMeasurement.getPointToPointDistance() / (1000.0 * multiplier.getUnit());
       pointDistance.add(p2pKilometers);
       pointAzimuth.add(geoMeasurement.getAzimuth());
       distance = p2pKilometers + distance;
-      if (distance >= (locationPoint.getOverallDistance().get(j) / 1000)) {
-        distance = 0;
-        j = j + 1;
-        if (j == locationPoint.getOverallDistance().size()) {
-          break;
-        }
+      if (distance >= maxRouteLength) {
+        locationPoint.setOverallDistance(distance);
+        break;
       }
     }
     LocationPoint returnPoints =
@@ -53,7 +52,8 @@ public class CalculateP2PDistance {
             locationPoint.getPointLongitude(),
             pointDistance,
             pointAzimuth,
-            3);
+            locationPoint.getStep(),
+            locationPoint.getOverallDistance());
     return returnPoints;
   }
 }

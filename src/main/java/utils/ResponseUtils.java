@@ -12,9 +12,7 @@ import model.LocationPoint;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 public class ResponseUtils {
@@ -37,32 +35,8 @@ public class ResponseUtils {
       posLong.add(dLong);
       elevation.add((dElevation));
     }
-    List<Double> distanceCountry;
-    distanceCountry = calculateCountryDistance(response);
-    LocationPoint locationPoint = new LocationPoint(posLat, posLong, elevation, distanceCountry);
+    LocationPoint locationPoint = new LocationPoint(posLat, posLong, elevation);
     return locationPoint;
-  }
-
-  public static List<Double> calculateCountryDistance(Response response) {
-    int i;
-    double distance;
-    String country;
-    Map<String, Double> flagDistance = new HashMap<>();
-    List<Double> distanceCountry = new ArrayList<>();
-    i = response.jsonPath().getList("response.route[0].summaryByCountry").size();
-    for (int j = 0; j < i; j++) {
-      distance =
-          response
-              .jsonPath()
-              .getDouble("response.route[0].summaryByCountry[" + (j - 1) + "].distance");
-      distanceCountry.add(distance);
-      country =
-          response
-              .jsonPath()
-              .getString("response.route[0].summaryByCountry[" + (j - 1) + "].country");
-      flagDistance.put(country, distance);
-    }
-    return distanceCountry;
   }
 
   public static void validateJsonAgainstSchema(String json, String schema) {

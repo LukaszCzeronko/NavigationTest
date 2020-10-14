@@ -17,10 +17,11 @@ import java.util.Random;
 @Slf4j
 public class DataReader {
   // read json type file and setup random localisation for given number of locations
-  public List<String> readFormattedJsonFile(int numberOfLocation) {
+  public List<String> readFormattedJsonFile(int numberOfLocation, String sourceFile) {
     List<Integer> ex = new ArrayList<>();
     List<String> coordinates = new ArrayList<>();
-    try (FileReader reader = new FileReader("src\\main\\resources\\localisation.json")) {
+    ClassLoader classLoader = getClass().getClassLoader();
+    try (FileReader reader = new FileReader(classLoader.getResource(sourceFile).getFile())) {
       JSONParser parser = new JSONParser();
       JSONArray obj = (JSONArray) parser.parse(reader);
       int size = obj.size();
@@ -81,9 +82,9 @@ public class DataReader {
     return schema.toString();
   }
   // write json file
-  public void writeFile(String json) {
-    try (FileWriter myWriter = new FileWriter("route.json")) {
-      myWriter.write(json);
+  public void writeFile(String fileContent, String path) {
+    try (FileWriter myWriter = new FileWriter(path)) {
+      myWriter.write(fileContent);
       log.info("Successfully wrote to the file.");
     } catch (IOException e) {
       log.error("An error occurred.", e);
