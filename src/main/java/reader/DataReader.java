@@ -82,9 +82,9 @@ public class DataReader {
     return schema.toString();
   }
   // write json file
-  public void writeFile(String json, String path) {
+  public void writeFile(String fileContent, String path) {
     try (FileWriter myWriter = new FileWriter(path)) {
-      myWriter.write(json);
+      myWriter.write(fileContent);
       log.info("Successfully wrote to the file.");
     } catch (IOException e) {
       log.error("An error occurred.", e);

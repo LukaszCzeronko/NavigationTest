@@ -21,19 +21,19 @@ import static utils.ResponseUtils.validateJsonAgainstSchema;
 @Slf4j
 public class RouteCalculation {
 
-  public List<Route> newPoints(CliProperties cliProperties) {
+  public List<Route> calculatePoints(CliProperties cliProperties) {
     LocationPoint locationPoint;
     LocationPoint locationPoint1;
     Client client = new Client();
     DataReader dataReader = new DataReader(); // read data base from file
     RouteSerializer routeSerializer = new RouteSerializer();
+    int amountOfRoutes = cliProperties.getNumberOfRoutes() * 2;
     List<String> points =
-        dataReader.readFormattedJsonFile(
-            (cliProperties.getNumberOfRoutes()) * 2, cliProperties.getInputFile());
+        dataReader.readFormattedJsonFile(amountOfRoutes, cliProperties.getInputFile());
     List<Route> routes = new ArrayList<>();
     double step = Utilities.calculateStep(cliProperties.getSpeed(), cliProperties.getInterval());
     int id = 0;
-    for (int i = 0; i < (cliProperties.getNumberOfRoutes()) * 2; i = i + 2) {
+    for (int i = 0; i < amountOfRoutes; i = i + 2) {
       id++;
       Route route = new Route();
       client.setUpWayPoints(points.get(i), points.get(i + 1)); // set up pair of points
@@ -44,7 +44,10 @@ public class RouteCalculation {
       CalculateCoordinates calculateCoordinates = new CalculateCoordinates();
       locationPoint1 =
           calculateP2PDistance.calculateDistance(
-              locationPoint, cliProperties.getMaxRouteLength(), cliProperties.getUnits(), step);
+              locationPoint,
+              cliProperties.getMaxRouteLength(),
+              cliProperties.getUnits(),
+              step); // TODO maybe better to pass whole Object
       route.setLocation(calculateCoordinates.positionFromCar(locationPoint1));
       route.setId(id);
       route.setLength(locationPoint1.getOverallDistance());

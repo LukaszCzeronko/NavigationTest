@@ -17,7 +17,7 @@ public class App {
     try {
       CommandLine.ParseResult parseResult = new CommandLine(cliProperties).parseArgs(args);
       if (!CommandLine.printHelpIfRequested(parseResult)) {
-        routeCalculation.newPoints(cliProperties);
+        routeCalculation.calculatePoints(cliProperties);
       }
     } catch (CommandLine.ParameterException ex) {
       System.err.println(ex.getMessage());
