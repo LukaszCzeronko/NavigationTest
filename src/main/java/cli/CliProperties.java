@@ -5,14 +5,18 @@ import picocli.CommandLine;
 
 @Getter
 public class CliProperties {
-  @CommandLine.Parameters(index = "0", description = "input-file")
-  private String inputFile;
 
-  @CommandLine.Parameters(index = "1", description = "number-of-routes")
+  @CommandLine.Parameters(index = "0", description = "number-of-routes")
   private int numberOfRoutes;
 
-  @CommandLine.Parameters(index = "2", description = "max-route-length")
+  @CommandLine.Parameters(index = "1", description = "max-route-length")
   private double maxRouteLength;
+  // input file must be in resource folder. If there is no option read from
+  // src\main\resources\localisation.json
+  @CommandLine.Option(
+      names = {"-in", "input"},
+      description = "input-file")
+  private String inputFile = "localisation.json";
 
   @CommandLine.Option(
       names = {"-u", "unit"},
@@ -22,15 +26,15 @@ public class CliProperties {
   @CommandLine.Option(
       names = {"-s", "speed"},
       description = "speed of a car")
-  double speed = 90.0;
+  private double speed = 90.0;
 
   @CommandLine.Option(
       names = {"-i", "-interval"},
       description = "interval rate")
   private int interval = 180;
-//TODO write output
+  // If path is given save file path localisation, in other case write file in main app folder
   @CommandLine.Option(
-      names = {"o", "output"},
+      names = {"-o", "-output"},
       description = "output-file")
-  private String outputFile;
+  private String outputFile = "route.json";
 }

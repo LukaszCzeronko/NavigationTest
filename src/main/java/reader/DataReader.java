@@ -20,7 +20,8 @@ public class DataReader {
   public List<String> readFormattedJsonFile(int numberOfLocation, String sourceFile) {
     List<Integer> ex = new ArrayList<>();
     List<String> coordinates = new ArrayList<>();
-    try (FileReader reader = new FileReader(sourceFile)) {
+    ClassLoader classLoader = getClass().getClassLoader();
+    try (FileReader reader = new FileReader(classLoader.getResource(sourceFile).getFile())) {
       JSONParser parser = new JSONParser();
       JSONArray obj = (JSONArray) parser.parse(reader);
       int size = obj.size();
@@ -81,8 +82,8 @@ public class DataReader {
     return schema.toString();
   }
   // write json file
-  public void writeFile(String json) {
-    try (FileWriter myWriter = new FileWriter("route.json")) {
+  public void writeFile(String json, String path) {
+    try (FileWriter myWriter = new FileWriter(path)) {
       myWriter.write(json);
       log.info("Successfully wrote to the file.");
     } catch (IOException e) {

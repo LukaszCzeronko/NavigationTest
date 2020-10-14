@@ -55,7 +55,7 @@ public class RouteCalculation {
     log.info(results);
     String schema = dataReader.readSchema("src\\main\\resources\\my-schema.json");
     validateJsonAgainstSchema(results, schema);
-    dataReader.writeFile(results);
+    dataReader.writeFile(results, cliProperties.getOutputFile());
     return routes;
   }
 }
