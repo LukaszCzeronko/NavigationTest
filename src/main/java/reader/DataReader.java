@@ -17,10 +17,10 @@ import java.util.Random;
 @Slf4j
 public class DataReader {
   // read json type file and setup random localisation for given number of locations
-  public List<String> readFormattedJsonFile(int numberOfLocation) {
+  public List<String> readFormattedJsonFile(int numberOfLocation, String sourceFile) {
     List<Integer> ex = new ArrayList<>();
     List<String> coordinates = new ArrayList<>();
-    try (FileReader reader = new FileReader("src\\main\\resources\\localisation.json")) {
+    try (FileReader reader = new FileReader(sourceFile)) {
       JSONParser parser = new JSONParser();
       JSONArray obj = (JSONArray) parser.parse(reader);
       int size = obj.size();

@@ -1,15 +1,15 @@
 package cli;
 
 public enum Units {
-  METRIC("km"),
-  IMPERIAL("mi");
-  private String unit;
+  METRIC(1.00),
+  IMPERIAL(0.621371192);
+  private double unit;
 
-  Units(String unit) {
+  Units(double unit) {
     this.unit = unit;
   }
 
-  public String getUnit() {
+  public double getUnit() {
 
     return this.unit;
   }

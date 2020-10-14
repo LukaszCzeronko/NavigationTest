@@ -28,7 +28,7 @@ public class CliProperties {
       names = {"-i", "-interval"},
       description = "interval rate")
   private int interval = 180;
-
+//TODO write output
   @CommandLine.Option(
       names = {"o", "output"},
       description = "output-file")
