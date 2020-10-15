@@ -17,4 +17,23 @@ public class Utilities {
     double distance = speed * (double) time / 3600;
     return distance;
   }
+
+  public static long transformDegree(double degree) {
+    degree = degree / 360.0000000;
+    degree = degree * 10000000;
+    double c = Math.pow(2, 32);
+    degree = degree * c;
+    degree = degree / 10000000;
+    long d = (long) degree;
+    return d;
+  }
+  public static String generateId() {
+    StringBuilder generatedId = new StringBuilder();
+    String alphabet = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+    for (int i = 0; i < 17; i++) {
+      int index = (int) (alphabet.length() * Math.random());
+      generatedId.append(alphabet.charAt(index));
+    }
+    return generatedId.toString();
+  }
 }

@@ -6,6 +6,7 @@ import cli.CliProperties;
 import http.Client;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+import model.Location;
 import model.LocationPoint;
 import model.Route;
 import reader.DataReader;
@@ -21,9 +22,12 @@ import static utils.ResponseUtils.validateJsonAgainstSchema;
 @Slf4j
 public class RouteCalculation {
 
-  public List<Route> calculatePoints(CliProperties cliProperties) {
+  public List<List<Location>> calculatePoints(CliProperties cliProperties) {
     LocationPoint locationPoint;
     LocationPoint locationPoint1;
+    List<Location> location;
+    location = null;
+    List<List<Location>> routeCoordinates = new ArrayList<>();
     Client client = new Client();
     DataReader dataReader = new DataReader(); // read data base from file
     RouteSerializer routeSerializer = new RouteSerializer();
@@ -48,17 +52,22 @@ public class RouteCalculation {
               cliProperties.getMaxRouteLength(),
               cliProperties.getUnits(),
               step); // TODO maybe better to pass whole Object
-      route.setLocation(calculateCoordinates.positionFromCar(locationPoint1));
+      location = new ArrayList<>();
+      location = calculateCoordinates.positionFromCar((locationPoint1));
+      routeCoordinates.add(location);
+
+      route.setLocation(location);
       route.setId(id);
       route.setLength(locationPoint1.getOverallDistance());
       route.setUnits(cliProperties.getUnits().name());
       routes.add(route);
     }
+
     String results = routeSerializer.serialize(routes);
     log.info(results);
     String schema = dataReader.readSchema("src\\main\\resources\\my-schema.json");
     validateJsonAgainstSchema(results, schema);
     dataReader.writeFile(results, cliProperties.getOutputFile());
-    return routes;
+    return routeCoordinates;
   }
 }
