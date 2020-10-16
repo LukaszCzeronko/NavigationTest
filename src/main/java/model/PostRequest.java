@@ -1,6 +1,8 @@
 package model;
 
 public class PostRequest {
+  public static final String parameter = "/message?";
+
   private String tp = "ET";
   private String id;
   private int df = 3;
@@ -140,7 +142,7 @@ public class PostRequest {
   }
 
   public String toString() {
-    return "/message?"
+    return parameter
         + "TP="
         + this.getTp()
         + "&ID="

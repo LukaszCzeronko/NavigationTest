@@ -8,7 +8,6 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,32 +79,5 @@ public class DataReader {
       log.error("An error occurred.", e);
     }
     return schema.toString();
-  }
-  // write json file
-  public void writeFile(String fileContent, String path) {
-    try (FileWriter myWriter = new FileWriter(path)) {
-      myWriter.write(fileContent);
-      log.info("Successfully wrote to the file.");
-    } catch (IOException e) {
-      log.error("An error occurred.", e);
-    }
-  }
-
-  public void writeCsv(List<List<String>> fileContent, List<String> id, String path) {
-    try (FileWriter myWriter = new FileWriter(path)) {
-      int i = 0;
-      for (List<String> s : fileContent) {
-
-        for (String g : s) {
-          myWriter.write(g + "," + " " + "," + id.get(i));
-          myWriter.write("\n");
-        }
-        myWriter.write("\n\n");
-        i++;
-      }
-      log.info("Successfully wrote to the file.");
-    } catch (IOException e) {
-      log.error("An error occurred.", e);
-    }
   }
 }

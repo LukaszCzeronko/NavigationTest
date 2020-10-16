@@ -25,8 +25,6 @@ public class RouteCalculation {
   public List<List<Location>> calculatePoints(CliProperties cliProperties) {
     LocationPoint locationPoint;
     LocationPoint locationPoint1;
-    List<Location> location;
-    location = null;
     List<List<Location>> routeCoordinates = new ArrayList<>();
     Client client = new Client();
     DataReader dataReader = new DataReader(); // read data base from file
@@ -38,6 +36,7 @@ public class RouteCalculation {
     double step = Utilities.calculateStep(cliProperties.getSpeed(), cliProperties.getInterval());
     int id = 0;
     for (int i = 0; i < amountOfRoutes; i = i + 2) {
+
       id++;
       Route route = new Route();
       client.setUpWayPoints(points.get(i), points.get(i + 1)); // set up pair of points
@@ -52,7 +51,7 @@ public class RouteCalculation {
               cliProperties.getMaxRouteLength(),
               cliProperties.getUnits(),
               step); // TODO maybe better to pass whole Object
-      location = new ArrayList<>();
+      List<Location> location;
       location = calculateCoordinates.positionFromCar((locationPoint1));
       routeCoordinates.add(location);
 
@@ -67,7 +66,7 @@ public class RouteCalculation {
     log.info(results);
     String schema = dataReader.readSchema("src\\main\\resources\\my-schema.json");
     validateJsonAgainstSchema(results, schema);
-    dataReader.writeFile(results, cliProperties.getOutputFile());
+    Utilities.writeFile(results, cliProperties.getOutputFile());
     return routeCoordinates;
   }
 }
