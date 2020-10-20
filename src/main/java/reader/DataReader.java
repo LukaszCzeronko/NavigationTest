@@ -80,4 +80,19 @@ public class DataReader {
     }
     return schema.toString();
   }
+
+  public String readRequest(String schemaPath) {
+    JSONArray schema = null;
+    try (FileReader reader = new FileReader(schemaPath)) {
+      JSONParser parser = new JSONParser();
+      schema = (JSONArray) parser.parse(reader);
+    } catch (FileNotFoundException e) {
+      log.error("An error occurred.", e);
+    } catch (IOException e) {
+      log.error("An error occurred.", e);
+    } catch (ParseException e) {
+      log.error("An error occurred.", e);
+    }
+    return schema.toString();
+  }
 }

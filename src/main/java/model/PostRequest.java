@@ -3,6 +3,7 @@ package model;
 public class PostRequest {
   public static final String parameter = "/message?";
 
+  private int ratio;
   private String tp = "ET";
   private String id;
   private int df = 3;
@@ -13,7 +14,16 @@ public class PostRequest {
   private String gd = "N";
 
   public PostRequest(
-      String tp, String id, int df, String ver, long lat, long lon, String app, String gd) {
+      int ratio,
+      String tp,
+      String id,
+      int df,
+      String ver,
+      long lat,
+      long lon,
+      String app,
+      String gd) {
+    this.ratio = ratio;
     this.tp = tp;
     this.id = id;
     this.df = df;
@@ -25,6 +35,10 @@ public class PostRequest {
   }
 
   public PostRequest() {}
+
+  public int getRatio() {
+    return this.ratio;
+  }
 
   public String getTp() {
     return this.tp;
@@ -56,6 +70,10 @@ public class PostRequest {
 
   public String getGd() {
     return this.gd;
+  }
+
+  public void setRatio(int ratio) {
+    this.ratio = ratio;
   }
 
   public void setTp(String tp) {
@@ -143,21 +161,21 @@ public class PostRequest {
 
   public String toString() {
     return parameter
-        + "TP="
+        + "tp="
         + this.getTp()
-        + "&ID="
+        + "&id="
         + this.getId()
-        + "&DF="
+        + "&df="
         + this.getDf()
-        + "&VER="
+        + "&ver="
         + this.getVer()
-        + "&LAT="
+        + "&lat="
         + this.getLat()
-        + "&LON="
+        + "&lon="
         + this.getLon()
-        + "&APP="
+        + "&app="
         + this.getApp()
-        + "&GD="
+        + "&gd="
         + this.getGd();
   }
 }

@@ -1,8 +1,11 @@
 package reader;
 
 import lombok.extern.slf4j.Slf4j;
+import model.PostRequest;
+import model.ProviderList;
 import model.Route;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,5 +32,23 @@ public class RouteSerializer {
       log.error("There was a error while deserializing Route object: ", e.getMessage());
     }
     return route;
+  }
+
+  public ProviderList deserializeRequest(String json) {
+    ObjectMapper mapper = new ObjectMapper();
+    ProviderList list = null;
+    try {
+      List<PostRequest> providerList =
+          mapper.readValue(json, new TypeReference<List<PostRequest>>() {});
+      for (PostRequest provider : providerList) {
+        System.out.println(provider);
+      }
+      list = new ProviderList();
+      list.setProviderList(providerList);
+      System.out.println(list);
+    } catch (IOException e) {
+      log.error(e.getMessage());
+    }
+    return list;
   }
 }

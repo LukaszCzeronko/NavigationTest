@@ -1,0 +1,21 @@
+[{"ratio":50,
+    "tp": "ET",
+    "id": "asd",
+    "df": 3,
+    "ver": "FFFF",
+    "lat": 2322,
+    "lon": 2223,
+    "app": "TT",
+    "gd":"P"
+    },{
+        "ratio": 25,
+        "gd": "N",
+        "df": 1,
+        "ver": "CCCC"
+    },
+    {
+        "ratio": 25,
+        "gd": "Z",
+        "df": 5,
+        "ver": "XXXX"
+    }]

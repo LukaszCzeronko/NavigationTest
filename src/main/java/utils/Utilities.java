@@ -62,4 +62,9 @@ public class Utilities {
       log.error("An error occurred.", e);
     }
   }
+
+  public static int calculatePercent(int numberOfRoutes, int ratio) {
+    float result = ((numberOfRoutes * ratio) / 100);
+    return (int) result;
+  }
 }

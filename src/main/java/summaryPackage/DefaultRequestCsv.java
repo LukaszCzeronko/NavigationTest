@@ -23,7 +23,6 @@ public class DefaultRequestCsv {
         routeRequest.add(postRequest.toString());
       }
       routesRequest.add(routeRequest);
-      System.out.println(routesRequest.get(j));
     }
     String csvString = Utilities.formatString(routesRequest, id);
     Utilities.writeFile(csvString, "csvRoute.csv");

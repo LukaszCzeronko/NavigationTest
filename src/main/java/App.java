@@ -4,6 +4,7 @@ import model.Location;
 import picocli.CommandLine;
 import summaryPackage.DefaultRequestCsv;
 import summaryPackage.RouteCalculation;
+import summaryPackage.SpecificRequestCsv;
 
 import java.util.List;
 
@@ -26,6 +27,8 @@ public class App {
         List<List<Location>> routePoints;
         routePoints = routeCalculation.calculatePoints(cliProperties);
         defaultRequestCsv.createDefaultCSV(routePoints);
+        SpecificRequestCsv specificRequestCsv = new SpecificRequestCsv();
+        specificRequestCsv.createSpecificCsv(routePoints);
       }
     } catch (CommandLine.ParameterException ex) {
       System.err.println(ex.getMessage());
