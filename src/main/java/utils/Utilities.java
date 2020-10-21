@@ -1,9 +1,11 @@
 package utils;
 
 import lombok.extern.slf4j.Slf4j;
+import model.RequestConfigList;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -66,5 +68,26 @@ public class Utilities {
   public static int calculatePercent(int numberOfRoutes, int ratio) {
     float result = ((numberOfRoutes * ratio) / 100);
     return (int) result;
+  }
+
+  public static List<Integer> calculateRouteDistribution(
+      RequestConfigList requestConfigList, int numberOfRoutes) {
+    int counter = numberOfRoutes;
+    List<Integer> distribution = new ArrayList<>();
+    for (int i = 0; i < requestConfigList.getConfigList().size(); i++) {
+      int j = requestConfigList.getConfigList().get(i).getRatio(); // ratio
+      int k = Utilities.calculatePercent(numberOfRoutes, j); // ratio in number
+      if (counter - k > 0) {
+        distribution.add(k);
+        counter = counter - k;
+      } else {
+        distribution.add(counter);
+        break;
+      }
+    }
+    if (requestConfigList.getConfigList().get(0).getRatio() == 0 || counter > 0) {
+      distribution.set(0, counter);
+    }
+    return distribution;
   }
 }

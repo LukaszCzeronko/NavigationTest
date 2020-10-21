@@ -1,7 +1,7 @@
 package summaryPackage;
 
 import model.Location;
-import model.PostRequest;
+import model.RequestConfig;
 import utils.Utilities;
 
 import java.util.ArrayList;
@@ -16,15 +16,15 @@ public class DefaultRequestCsv {
       routeRequest = new ArrayList<>();
       id.add(Utilities.generateId());
       for (int i = 0; i < routes.get(j).size(); i++) {
-        PostRequest postRequest = new PostRequest();
-        postRequest.setId(id.get(j));
-        postRequest.setLat(Utilities.transformDegree(routes.get(j).get(i).getLatitude()));
-        postRequest.setLon(Utilities.transformDegree(routes.get(j).get(i).getLongitude()));
-        routeRequest.add(postRequest.toString());
+        RequestConfig requestConfig = new RequestConfig();
+        requestConfig.setId(id.get(j));
+        requestConfig.setLat(Utilities.transformDegree(routes.get(j).get(i).getLatitude()));
+        requestConfig.setLon(Utilities.transformDegree(routes.get(j).get(i).getLongitude()));
+        routeRequest.add(requestConfig.toString());
       }
       routesRequest.add(routeRequest);
     }
     String csvString = Utilities.formatString(routesRequest, id);
-    Utilities.writeFile(csvString, "csvRoute.csv");
+    Utilities.writeFile(csvString, "csvRouteRequest.csv");
   }
 }

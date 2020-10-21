@@ -37,4 +37,9 @@ public class CliProperties {
       names = {"-o", "-output"},
       description = "output file")
   private String outputFile = "route.json";
+
+  @CommandLine.Option(
+      names = {"-c", "config"},
+      description = "output csv configuration: s -standard , c -custom ")
+  private char config = 's';
 }

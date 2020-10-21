@@ -2,10 +2,10 @@ package summaryPackage;
 
 import lombok.extern.slf4j.Slf4j;
 import model.Location;
-import model.PostRequest;
-import model.ProviderList;
+import model.RequestConfig;
+import model.RequestConfigList;
+import reader.ConfigSerializer;
 import reader.DataReader;
-import reader.RouteSerializer;
 import utils.Utilities;
 
 import java.util.ArrayList;
@@ -16,41 +16,41 @@ public class SpecificRequestCsv {
   public void createSpecificCsv(List<List<Location>> routes) {
     List<String> id = new ArrayList<>();
     DataReader dataReader = new DataReader();
-    String json;
-    json = dataReader.readRequest("routeRequest.json");
-    RouteSerializer routeSerializer = new RouteSerializer();
-    ProviderList providerList = routeSerializer.deserializeRequest(json);
+    String config;
+    config = dataReader.readRequest("configuration.json");
+    RequestConfigList requestConfigList = ConfigSerializer.deserializeRequest(config);
     int sumOfRoutes = 0;
     List<List<String>> listOfRequests = new ArrayList<>();
-    List<String> routeReq;
-    for (int i = 0; i < providerList.getProviderList().size(); i++) {
-      for (int j = 0;
-          j
-              < Utilities.calculatePercent(
-                  routes.size(), providerList.getProviderList().get(i).getRatio());
-          j++) {
+    List<String> requestsForSingleRoute;
+    int numberOfRoutes = routes.size();
+    List<Integer> routeDistribution =
+        Utilities.calculateRouteDistribution(requestConfigList, numberOfRoutes);
+    for (int i = 0; i < requestConfigList.getConfigList().size(); i++) {
+      for (int j = 0; j < routeDistribution.get(i); j++) {
         id.add(Utilities.generateId());
-        providerList.getProviderList().get(i).setId(id.get(id.size() - 1));
-        routeReq = new ArrayList<>();
-        for (int l = 0; l < routes.get(j).size(); l++) {
-          PostRequest postRequests = new PostRequest();
-          postRequests.setId(id.get(id.size() - 1));
-          postRequests.setLat(
+        requestConfigList.getConfigList().get(i).setId(id.get(id.size() - 1));
+        requestsForSingleRoute = new ArrayList<>();
+        int sizeOfRoute = routes.get(j).size();
+        for (int l = 0; l < sizeOfRoute; l++) {
+          RequestConfig requestsConfig = new RequestConfig();
+          requestsConfig.setId(id.get(id.size() - 1));
+          requestsConfig.setLat(
               Utilities.transformDegree(routes.get(sumOfRoutes).get(l).getLatitude()));
-          postRequests.setLon(
+          requestsConfig.setLon(
               Utilities.transformDegree(routes.get(sumOfRoutes).get(l).getLongitude()));
-          postRequests.setApp(providerList.getProviderList().get(i).getApp());
-          postRequests.setDf(providerList.getProviderList().get(i).getDf());
-          postRequests.setGd(providerList.getProviderList().get(i).getGd());
-          postRequests.setTp(providerList.getProviderList().get(i).getTp());
-          postRequests.setVer(providerList.getProviderList().get(i).getVer());
-          routeReq.add(postRequests.toString());
+          RequestConfig configModel = requestConfigList.getConfigList().get(i);
+          requestsConfig.setApp(configModel.getApp());
+          requestsConfig.setDf(configModel.getDf());
+          requestsConfig.setGd(configModel.getGd());
+          requestsConfig.setTp(configModel.getTp());
+          requestsConfig.setVer(configModel.getVer());
+          requestsForSingleRoute.add(requestsConfig.toString());
         }
         sumOfRoutes = sumOfRoutes + 1;
-        listOfRequests.add(routeReq);
+        listOfRequests.add(requestsForSingleRoute);
       }
     }
     String csvString = Utilities.formatString(listOfRequests, id);
-    Utilities.writeFile(csvString, "csvRouteConfig.csv");
+    Utilities.writeFile(csvString, "csvRouteRequest.csv");
   }
 }

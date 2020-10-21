@@ -1,9 +1,9 @@
 package model;
 
-public class PostRequest {
+public class RequestConfig {
   public static final String parameter = "/message?";
 
-  private int ratio;
+  private int ratio = 0;
   private String tp = "ET";
   private String id;
   private int df = 3;
@@ -13,7 +13,7 @@ public class PostRequest {
   private String app = "TT";
   private String gd = "N";
 
-  public PostRequest(
+  public RequestConfig(
       int ratio,
       String tp,
       String id,
@@ -34,7 +34,7 @@ public class PostRequest {
     this.gd = gd;
   }
 
-  public PostRequest() {}
+  public RequestConfig() {}
 
   public int getRatio() {
     return this.ratio;
@@ -110,8 +110,8 @@ public class PostRequest {
 
   public boolean equals(final Object o) {
     if (o == this) return true;
-    if (!(o instanceof PostRequest)) return false;
-    final PostRequest other = (PostRequest) o;
+    if (!(o instanceof RequestConfig)) return false;
+    final RequestConfig other = (RequestConfig) o;
     if (!other.canEqual((Object) this)) return false;
     final Object this$TP = this.getTp();
     final Object other$TP = other.getTp();
@@ -135,7 +135,7 @@ public class PostRequest {
   }
 
   protected boolean canEqual(final Object other) {
-    return other instanceof PostRequest;
+    return other instanceof RequestConfig;
   }
 
   public int hashCode() {

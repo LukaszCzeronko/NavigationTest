@@ -26,9 +26,15 @@ public class App {
         DefaultRequestCsv defaultRequestCsv = new DefaultRequestCsv();
         List<List<Location>> routePoints;
         routePoints = routeCalculation.calculatePoints(cliProperties);
-        defaultRequestCsv.createDefaultCSV(routePoints);
-        SpecificRequestCsv specificRequestCsv = new SpecificRequestCsv();
-        specificRequestCsv.createSpecificCsv(routePoints);
+        if (cliProperties.getConfig() == 'c') {
+          SpecificRequestCsv specificRequestCsv = new SpecificRequestCsv();
+          specificRequestCsv.createSpecificCsv(routePoints);
+       }
+        else{
+          defaultRequestCsv.createDefaultCSV(routePoints);
+        }
+
+
       }
     } catch (CommandLine.ParameterException ex) {
       System.err.println(ex.getMessage());

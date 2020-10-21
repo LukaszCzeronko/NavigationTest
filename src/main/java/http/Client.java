@@ -54,9 +54,7 @@ public class Client {
   // send request with given queryParameters
   public Response sendRequest() {
     RequestSpecification newRequestSpecification = RestAssured.given();
-    newRequestSpecification.log().parameters();
     newRequestSpecification.queryParams(this.baseQueryParameters);
-    newRequestSpecification.log().parameters();
     ByteArrayOutputStream responseOutputStream = new ByteArrayOutputStream();
     ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream();
     PrintStream requestPs = new PrintStream(requestOutputStream, true);
@@ -67,7 +65,7 @@ public class Client {
     Response response = newRequestSpecification.request(Method.GET);
     String requestDetails = new String(requestOutputStream.toByteArray());
     String responseDetails = new String(responseOutputStream.toByteArray());
-    log.info("request details: {}", requestDetails);
+    // log.info("request details: {}", requestDetails);
     // log.info("response details: {}",responseDetails);
     return response;
   }
