@@ -19,34 +19,44 @@ public class SpecificRequestCsv {
     String config;
     config = dataReader.readRequest("configuration.json");
     RequestConfigList requestConfigList = ConfigSerializer.deserializeRequest(config);
-    int sumOfRoutes = 0;
+    int numberOfProcessedRoutes = 0;
     List<List<String>> listOfRequests = new ArrayList<>();
     List<String> requestsForSingleRoute;
     int numberOfRoutes = routes.size();
-    List<Integer> routeDistribution =
-        Utilities.calculateRouteDistribution(requestConfigList, numberOfRoutes);
-    for (int i = 0; i < requestConfigList.getConfigList().size(); i++) {
-      for (int j = 0; j < routeDistribution.get(i); j++) {
-        id.add(Utilities.generateId());
-        requestConfigList.getConfigList().get(i).setId(id.get(id.size() - 1));
+    List<Integer> routeDistribution = Utilities.calculateRouteDistribution(requestConfigList, numberOfRoutes);
+    int numberOfConfigs = routeDistribution.size();
+
+    System.out.println(numberOfConfigs);
+    System.out.println(routeDistribution.toString());
+
+    for (int configNumber = 0; configNumber < numberOfConfigs; configNumber++) {
+      int maxNumberOfRoutesForConfig = routeDistribution.get(configNumber);
+      for (int routeIndexInConfig = 0; routeIndexInConfig < maxNumberOfRoutesForConfig; routeIndexInConfig++) {
+        String idForRoute = Utilities.generateId();
+        id.add(idForRoute);
+
+//        requestConfigList.getConfigList().get(configNumber).setId(idForRoute);
         requestsForSingleRoute = new ArrayList<>();
-        int sizeOfRoute = routes.get(j).size();
-        for (int l = 0; l < sizeOfRoute; l++) {
-          RequestConfig requestsConfig = new RequestConfig();
-          requestsConfig.setId(id.get(id.size() - 1));
-          requestsConfig.setLat(
-              Utilities.transformDegree(routes.get(sumOfRoutes).get(l).getLatitude()));
-          requestsConfig.setLon(
-              Utilities.transformDegree(routes.get(sumOfRoutes).get(l).getLongitude()));
-          RequestConfig configModel = requestConfigList.getConfigList().get(i);
-          requestsConfig.setApp(configModel.getApp());
-          requestsConfig.setDf(configModel.getDf());
-          requestsConfig.setGd(configModel.getGd());
-          requestsConfig.setTp(configModel.getTp());
-          requestsConfig.setVer(configModel.getVer());
-          requestsForSingleRoute.add(requestsConfig.toString());
+        int sizeOfRoute = routes.get(numberOfProcessedRoutes).size();
+        for (int locationIndex = 0; locationIndex < sizeOfRoute; locationIndex++) {
+          RequestConfig requestConfig = new RequestConfig();
+          requestConfig.setId(idForRoute);
+
+          System.out.println(routeIndexInConfig+ " "+locationIndex +" " + numberOfProcessedRoutes +" "+ numberOfRoutes );
+
+          requestConfig.setLat(
+              Utilities.transformDegree(routes.get(numberOfProcessedRoutes).get(locationIndex).getLatitude()));
+          requestConfig.setLon(
+              Utilities.transformDegree(routes.get(numberOfProcessedRoutes).get(locationIndex).getLongitude()));
+          RequestConfig configModel = requestConfigList.getConfigList().get(configNumber);
+          requestConfig.setApp(configModel.getApp());
+          requestConfig.setDf(configModel.getDf());
+          requestConfig.setGd(configModel.getGd());
+          requestConfig.setTp(configModel.getTp());
+          requestConfig.setVer(configModel.getVer());
+          requestsForSingleRoute.add(requestConfig.toString());
         }
-        sumOfRoutes = sumOfRoutes + 1;
+        numberOfProcessedRoutes = numberOfProcessedRoutes + 1;
         listOfRequests.add(requestsForSingleRoute);
       }
     }

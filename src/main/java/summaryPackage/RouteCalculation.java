@@ -41,7 +41,7 @@ public class RouteCalculation {
       Route route = new Route();
       client.setUpWayPoints(points.get(i), points.get(i + 1)); // set up pair of points
       Response response = client.sendRequest(); // send request with given query parameters
-      ResponseUtils.getLocationPoint(response);
+//      ResponseUtils.getLocationPoint(response);
       locationPoint = ResponseUtils.getLocationPoint(response);
       CalculateP2PDistance calculateP2PDistance = new CalculateP2PDistance();
       CalculateCoordinates calculateCoordinates = new CalculateCoordinates();

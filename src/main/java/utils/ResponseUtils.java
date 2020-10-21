@@ -21,6 +21,7 @@ public class ResponseUtils {
     List<Double> posLong = new ArrayList<>();
     List<Double> elevation = new ArrayList<>();
     List<String> jsonResponse = response.jsonPath().getList("response.route[0].shape");
+    System.out.println("size: " +jsonResponse.size()+ "  shapes: " + new ArrayList(jsonResponse.subList(0, 50)));
     for (int i = 0; i < jsonResponse.size(); i++) {
       double dLat;
       double dLong;

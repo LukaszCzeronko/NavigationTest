@@ -14,7 +14,7 @@ public class RouteSerializer {
   public String serialize(List<Route> route) {
     String jsonString = "";
     try {
-      jsonString = objectMapper.writeValueAsString(route);
+      jsonString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(route);
     } catch (IOException e) {
       log.error("There was a error while serializing Route object: ", e.getMessage());
     }
