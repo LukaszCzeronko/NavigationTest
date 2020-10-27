@@ -23,7 +23,7 @@ public class UtilitiesTest {
 
   @Parameterized.Parameters
   public static Collection<Object[]> data() {
-    Object[][] data = new Object[][] {{1, 2, 0}, {10, 20, 2},{0,0,0},{1,100,1}};
+    Object[][] data = new Object[][] {{1, 2, 0}, {10, 20, 2}, {0, 0, 0}, {1, 100, 1}};
     return Arrays.asList(data);
   }
 

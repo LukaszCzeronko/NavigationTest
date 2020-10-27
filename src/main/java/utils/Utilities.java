@@ -88,6 +88,9 @@ public class Utilities {
     if (requestConfigList.getConfigList().get(0).getRatio() == 0 && counter > 0) {
       distribution.set(0, counter);
     }
+    if(counter>0 && requestConfigList.getConfigList().size()==1){
+      distribution.set(0,numberOfRoutes);
+    }
     return distribution;
   }
 }
