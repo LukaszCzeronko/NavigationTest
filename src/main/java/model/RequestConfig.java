@@ -112,7 +112,7 @@ public class RequestConfig {
     if (o == this) return true;
     if (!(o instanceof RequestConfig)) return false;
     final RequestConfig other = (RequestConfig) o;
-    if (!other.canEqual((Object) this)) return false;
+    if (!other.canEqual(this)) return false;
     final Object this$TP = this.getTp();
     final Object other$TP = other.getTp();
     if (this$TP == null ? other$TP != null : !this$TP.equals(other$TP)) return false;
@@ -130,8 +130,7 @@ public class RequestConfig {
     if (this$APP == null ? other$APP != null : !this$APP.equals(other$APP)) return false;
     final Object this$GD = this.getGd();
     final Object other$GD = other.getGd();
-    if (this$GD == null ? other$GD != null : !this$GD.equals(other$GD)) return false;
-    return true;
+    return this$GD == null ? other$GD == null : this$GD.equals(other$GD);
   }
 
   protected boolean canEqual(final Object other) {

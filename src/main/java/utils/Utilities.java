@@ -10,11 +10,12 @@ import java.util.List;
 
 @Slf4j
 public class Utilities {
-  // split and reverse string
+  private static final String alphabet = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+
   public static String splitAndRevertString(String strToReverse) {
     String str1, str2;
     str1 = strToReverse;
-    String separated[] = str1.split(",");
+    String[] separated = str1.split(",");
     str2 = separated[1] + "," + separated[0];
     return str2;
   }
@@ -34,7 +35,6 @@ public class Utilities {
 
   public static String generateId() {
     StringBuilder generatedId = new StringBuilder();
-    String alphabet = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890";
     for (int i = 0; i < 17; i++) {
       int index = (int) (alphabet.length() * Math.random());
       generatedId.append(alphabet.charAt(index));
@@ -75,17 +75,17 @@ public class Utilities {
     int counter = numberOfRoutes;
     List<Integer> distribution = new ArrayList<>();
     for (int i = 0; i < requestConfigList.getConfigList().size(); i++) {
-      int j = requestConfigList.getConfigList().get(i).getRatio(); // ratio
-      int k = Utilities.calculatePercent(numberOfRoutes, j); // ratio in number
-      if (counter - k > 0) {
-        distribution.add(k);
-        counter = counter - k;
+      int ratioForCurrentConfig = requestConfigList.getConfigList().get(i).getRatio();
+      int routesWithGivenConfig = Utilities.calculatePercent(numberOfRoutes, ratioForCurrentConfig);
+      if (counter - routesWithGivenConfig > 0) {
+        distribution.add(routesWithGivenConfig);
+        counter = counter - routesWithGivenConfig;
       } else {
         distribution.add(counter);
         break;
       }
     }
-    if (requestConfigList.getConfigList().get(0).getRatio() == 0 || counter > 0) {
+    if (requestConfigList.getConfigList().get(0).getRatio() == 0 && counter > 0) {
       distribution.set(0, counter);
     }
     return distribution;

@@ -15,6 +15,7 @@ import java.util.Random;
 
 @Slf4j
 public class DataReader {
+  private static final String cityFilePath = "src\\main\\resources\\cities.json";
   // read json type file and setup random localisation for given number of locations
   public List<String> readFormattedJsonFile(int numberOfLocation, String sourceFile) {
     List<Integer> ex = new ArrayList<>();
@@ -46,7 +47,7 @@ public class DataReader {
   // read and parse pure json file with cities
   public List<String> readUnformattedJsonFile() {
     List<String> coordinates = new ArrayList<>();
-    try (FileReader reader = new FileReader("src\\main\\resources\\cities.json")) {
+    try (FileReader reader = new FileReader(cityFilePath)) {
       JSONParser parser = new JSONParser();
       JSONObject obj = (JSONObject) parser.parse(reader);
       JSONArray obj2 = (JSONArray) obj.get("features");
@@ -62,7 +63,6 @@ public class DataReader {
     } catch (ParseException e) {
       log.error("An error occurred.", e);
     }
-    // return whole json file
     return coordinates;
   }
 

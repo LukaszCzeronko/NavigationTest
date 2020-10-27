@@ -16,19 +16,20 @@ import java.util.List;
 
 @Slf4j
 public class ResponseUtils {
+  private static final String jsonShapePath = "response.route[0].shape";
+
   public static LocationPoint getLocationPoint(Response response) {
     List<Double> posLat = new ArrayList<>();
     List<Double> posLong = new ArrayList<>();
     List<Double> elevation = new ArrayList<>();
-    List<String> jsonResponse = response.jsonPath().getList("response.route[0].shape");
-    System.out.println("size: " +jsonResponse.size()+ "  shapes: " + new ArrayList(jsonResponse.subList(0, 50)));
+    List<String> jsonResponse = response.jsonPath().getList(jsonShapePath);
     for (int i = 0; i < jsonResponse.size(); i++) {
       double dLat;
       double dLong;
       double dElevation;
       String strToSplit;
       strToSplit = jsonResponse.get(i);
-      String separated[] = strToSplit.split(",");
+      String[] separated = strToSplit.split(",");
       dLat = Double.parseDouble(separated[0]);
       dLong = Double.parseDouble(separated[1]);
       dElevation = Double.parseDouble((separated[2]));

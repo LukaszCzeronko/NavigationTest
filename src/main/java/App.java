@@ -1,10 +1,9 @@
 import cli.CliProperties;
 import lombok.extern.slf4j.Slf4j;
-import model.Location;
+import model.Route;
 import picocli.CommandLine;
-import summaryPackage.DefaultRequestCsv;
-import summaryPackage.RouteCalculation;
-import summaryPackage.SpecificRequestCsv;
+import summary.RouteCalculation;
+import summary.SpecificRequestCsv;
 
 import java.util.List;
 
@@ -22,19 +21,10 @@ public class App {
     try {
       CommandLine.ParseResult parseResult = new CommandLine(cliProperties).parseArgs(args);
       if (!CommandLine.printHelpIfRequested(parseResult)) {
-
-        DefaultRequestCsv defaultRequestCsv = new DefaultRequestCsv();
-        List<List<Location>> routePoints;
+        List<Route> routePoints;
         routePoints = routeCalculation.calculatePoints(cliProperties);
-        if (cliProperties.getConfig() == 'c') {
-          SpecificRequestCsv specificRequestCsv = new SpecificRequestCsv();
-          specificRequestCsv.createSpecificCsv(routePoints);
-       }
-        else{
-          defaultRequestCsv.createDefaultCSV(routePoints);
-        }
-
-
+        SpecificRequestCsv specificRequestCsv = new SpecificRequestCsv();
+        specificRequestCsv.createSpecificCsv(routePoints, cliProperties);
       }
     } catch (CommandLine.ParameterException ex) {
       System.err.println(ex.getMessage());

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Slf4j
 public class RouteSerializer {
-  private ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   public String serialize(List<Route> route) {
     String jsonString = "";

@@ -14,17 +14,17 @@ public class CliProperties {
   // input file must be in resource folder. If there is no option read from
   // src\main\resources\locations.json
   @CommandLine.Option(
-      names = {"-in", "input"},
+      names = {"-in", "-input"},
       description = "input file")
   private String inputFile = "locations.json";
 
   @CommandLine.Option(
-      names = {"-u", "unit"},
+      names = {"-u", "-unit"},
       description = "unit system: METRIC or IMPERIAL")
   private Units units = Units.METRIC;
 
   @CommandLine.Option(
-      names = {"-s", "speed"},
+      names = {"-s", "-speed"},
       description = "speed of a car")
   private double speed = 90.0;
 
@@ -39,7 +39,17 @@ public class CliProperties {
   private String outputFile = "route.json";
 
   @CommandLine.Option(
-      names = {"-c", "config"},
-      description = "output csv configuration: s -standard , c -custom ")
-  private char config = 's';
+      names = {"-c", "-config"},
+      description = "output csv configuration path")
+  private String configPath = "configuration.json";
+
+  @CommandLine.Option(
+      names = {"-r", "results"},
+      description = "csv result file")
+  private String csvPath = "csvRouteRequest.csv";
+
+  @CommandLine.Option(
+      names = {"-d", "-debug"},
+      description = "turn on debug mode")
+  private boolean debug = false;
 }
