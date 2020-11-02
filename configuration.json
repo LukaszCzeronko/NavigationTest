@@ -1,5 +1,6 @@
-[{
-    "ratio": 50,
+[
+  {
+
     "tp": "ET",
     "id": "asd",
     "df": 3,
@@ -7,16 +8,18 @@
     "lat": 2322,
     "lon": 2223,
     "app": "TT",
-    "gd":"P"
-    },{
+    "gd": "P"
+  },
+  {
     "ratio": 25,
     "gd": "N",
     "df": 1,
     "ver": "CCCC"
-},
-    {
-        "ratio": 25,
-        "gd": "Z",
-        "df": 5,
-        "ver": "XXXX"
-    }]
+  },
+  {
+    "ratio": 75,
+    "gd": "Z",
+    "df": 5,
+    "ver": "XXXX"
+  }
+]

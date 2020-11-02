@@ -47,7 +47,7 @@ public class RouteCalculation {
           calculateP2PDistance.calculateDistance(
               locationPoint, cliProperties.getMaxRouteLength(), cliProperties.getUnits(), step);
       List<Location> location;
-      location = calculateCoordinates.positionFromCar((locationPoint1));
+      location = calculateCoordinates.calculatePointsOnRoute((locationPoint1));
       route.setLocation(location);
       route.setId(id);
       route.setLength(locationPoint1.getOverallDistance());

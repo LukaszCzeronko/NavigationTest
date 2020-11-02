@@ -21,8 +21,7 @@ public class App {
     try {
       CommandLine.ParseResult parseResult = new CommandLine(cliProperties).parseArgs(args);
       if (!CommandLine.printHelpIfRequested(parseResult)) {
-        List<Route> routePoints;
-        routePoints = routeCalculation.calculatePoints(cliProperties);
+        List<Route> routePoints = routeCalculation.calculatePoints(cliProperties);
         SpecificRequestCsv specificRequestCsv = new SpecificRequestCsv();
         specificRequestCsv.createSpecificCsv(routePoints, cliProperties);
       }

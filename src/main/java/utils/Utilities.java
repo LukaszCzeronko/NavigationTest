@@ -2,6 +2,7 @@ package utils;
 
 import lombok.extern.slf4j.Slf4j;
 import model.RequestConfigList;
+import validation.ValidationUtils;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Slf4j
 public class Utilities {
-  private static final String alphabet = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+  private static final String ALPHABET = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890";
 
   public static String splitAndRevertString(String strToReverse) {
     String str1, str2;
@@ -36,8 +37,8 @@ public class Utilities {
   public static String generateId() {
     StringBuilder generatedId = new StringBuilder();
     for (int i = 0; i < 17; i++) {
-      int index = (int) (alphabet.length() * Math.random());
-      generatedId.append(alphabet.charAt(index));
+      int index = (int) (ALPHABET.length() * Math.random());
+      generatedId.append(ALPHABET.charAt(index));
     }
     return generatedId.toString();
   }
@@ -72,6 +73,7 @@ public class Utilities {
 
   public static List<Integer> calculateRouteDistribution(
       RequestConfigList requestConfigList, int numberOfRoutes) {
+    ValidationUtils.checkGreaterEqualsZero("Number of routes is smaller or equals zero ",numberOfRoutes);
     int counter = numberOfRoutes;
     List<Integer> distribution = new ArrayList<>();
     for (int i = 0; i < requestConfigList.getConfigList().size(); i++) {
@@ -82,14 +84,19 @@ public class Utilities {
         counter = counter - routesWithGivenConfig;
       } else {
         distribution.add(counter);
+        counter = 0;
         break;
       }
     }
     if (requestConfigList.getConfigList().get(0).getRatio() == 0 && counter > 0) {
       distribution.set(0, counter);
     }
-    if(counter>0 && requestConfigList.getConfigList().size()==1){
-      distribution.set(0,numberOfRoutes);
+    if (counter > 0 && requestConfigList.getConfigList().size() == 1) {
+      distribution.set(0, numberOfRoutes);
+    }
+    if (counter > 0 && requestConfigList.getConfigList().get(0).getRatio() != 0 && requestConfigList.getConfigList().size() != 1) {
+      int actualDistribution=distribution.get(0);
+      distribution.set(0, actualDistribution+counter);
     }
     return distribution;
   }

@@ -11,6 +11,9 @@ public class LocationPoint {
   private List<Double> pointAzimuth;
   private double step;
 
+  public LocationPoint(){
+
+  }
   public LocationPoint(
       List<Double> pointLatitude, List<Double> pointLongitude, List<Double> pointElevation) {
     this.pointLatitude = pointLatitude;
