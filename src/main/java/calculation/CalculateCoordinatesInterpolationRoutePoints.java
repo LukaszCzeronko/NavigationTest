@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-public class CalculateCoordinates {
+public class CalculateCoordinatesInterpolationRoutePoints {
   public List<Location> calculatePointsOnRoute(LocationPoint locationPoint) {
     Location location;
     List<Location> resultsCoordinates = new ArrayList<>();
@@ -27,7 +27,7 @@ public class CalculateCoordinates {
     double sDistance = 0;
     double cDist = 0;
     double cAng;
-    double lowSum=0;
+    double lowSum = 0;
     for (int i = 0; i < locationPoint.getPointDistance().size(); i++) {
       sDistance = sDistance + locationPoint.getPointDistance().get(i) - cDist;
       cDist = 0;
@@ -38,10 +38,10 @@ public class CalculateCoordinates {
         GeodeticCalculator geoCalc = new GeodeticCalculator();
         Ellipsoid reference = Ellipsoid.WGS84;
         GlobalCoordinates startPoint;
-          startPoint =
-              new GlobalCoordinates(
-                  locationPoint.getPointLatitude().get(i - 1),
-                  locationPoint.getPointLongitude().get(i - 1));
+        startPoint =
+            new GlobalCoordinates(
+                locationPoint.getPointLatitude().get(i - 1),
+                locationPoint.getPointLongitude().get(i - 1));
 
         double[] endBearing = new double[1];
         GlobalCoordinates dest =
@@ -52,10 +52,10 @@ public class CalculateCoordinates {
         locationPoint.getPointLongitude().set(i - 1, dest.getLongitude());
         newCalculatedCoordinates.put(
             locationPoint.getPointLatitude().get(i), locationPoint.getPointLongitude().get(i));
-        newCalculatedLat.add(locationPoint.getPointLatitude().get(i-1));
-        newCalculatedLong.add((locationPoint.getPointLongitude().get(i-1)));
+        newCalculatedLat.add(locationPoint.getPointLatitude().get(i - 1));
+        newCalculatedLong.add((locationPoint.getPointLongitude().get(i - 1)));
         --i;
-      } else if((i + 1) >= locationPoint.getPointDistance().size()) {
+      } else if ((i + 1) >= locationPoint.getPointDistance().size()) {
         GeodeticCalculator geoCalc = new GeodeticCalculator();
         Ellipsoid reference = Ellipsoid.WGS84;
         GlobalCoordinates startPoint;
@@ -80,6 +80,7 @@ public class CalculateCoordinates {
       }
     }
     for (int i = 0; i < newCalculatedLat.size(); i++) {
+      System.out.println(newCalculatedLat.get(i) + "," + newCalculatedLong.get(i) + ";");
       location = new Location();
       location.setLatitude(newCalculatedLat.get(i));
       location.setLongitude(newCalculatedLong.get(i));

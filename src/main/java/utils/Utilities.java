@@ -1,7 +1,12 @@
 package utils;
 
 import lombok.extern.slf4j.Slf4j;
+import model.Location;
 import model.RequestConfigList;
+import org.gavaghan.geodesy.Ellipsoid;
+import org.gavaghan.geodesy.GeodeticCalculator;
+import org.gavaghan.geodesy.GeodeticCurve;
+import org.gavaghan.geodesy.GlobalPosition;
 import validation.ValidationUtils;
 
 import java.io.FileWriter;
@@ -73,7 +78,8 @@ public class Utilities {
 
   public static List<Integer> calculateRouteDistribution(
       RequestConfigList requestConfigList, int numberOfRoutes) {
-    ValidationUtils.checkGreaterEqualsZero("Number of routes is smaller or equals zero ",numberOfRoutes);
+    ValidationUtils.checkGreaterEqualsZero(
+        "Number of routes is smaller or equals zero ", numberOfRoutes);
     int counter = numberOfRoutes;
     List<Integer> distribution = new ArrayList<>();
     for (int i = 0; i < requestConfigList.getConfigList().size(); i++) {
@@ -94,10 +100,47 @@ public class Utilities {
     if (counter > 0 && requestConfigList.getConfigList().size() == 1) {
       distribution.set(0, numberOfRoutes);
     }
-    if (counter > 0 && requestConfigList.getConfigList().get(0).getRatio() != 0 && requestConfigList.getConfigList().size() != 1) {
-      int actualDistribution=distribution.get(0);
-      distribution.set(0, actualDistribution+counter);
+    if (counter > 0
+        && requestConfigList.getConfigList().get(0).getRatio() != 0
+        && requestConfigList.getConfigList().size() != 1) {
+      int actualDistribution = distribution.get(0);
+      distribution.set(0, actualDistribution + counter);
     }
     return distribution;
+  }
+
+  public static double calculateP2PAzimuth(double lat1, double lon1, double lat2, double lon2) {
+    GeodeticCalculator geoCalc = new GeodeticCalculator();
+    Ellipsoid reference = Ellipsoid.WGS84;
+    GlobalPosition firstPoint;
+    firstPoint = new GlobalPosition(lat1, lon1, 1);
+
+    GlobalPosition secondPoint;
+    secondPoint = new GlobalPosition(lat2, lon2, 1);
+
+    GeodeticCurve geoCurve = geoCalc.calculateGeodeticCurve(reference, firstPoint, secondPoint);
+    geoCalc.calculateGeodeticCurve(reference, firstPoint, secondPoint);
+    return geoCurve.getAzimuth();
+  }
+
+  public static double calculateP2PDistance(double lat1, double lon1, double lat2, double lon2) {
+    GeodeticCalculator geoCalc = new GeodeticCalculator();
+    Ellipsoid reference = Ellipsoid.WGS84;
+    GlobalPosition firstPoint;
+    firstPoint = new GlobalPosition(lat1, lon1, 1);
+
+    GlobalPosition secondPoint;
+    secondPoint = new GlobalPosition(lat2, lon2, 1);
+    GeodeticCurve geoCurve = geoCalc.calculateGeodeticCurve(reference, firstPoint, secondPoint);
+    double ellipseKilometers = geoCurve.getEllipsoidalDistance() / 1000.0;
+    geoCalc.calculateGeodeticCurve(reference, firstPoint, secondPoint);
+    return ellipseKilometers;
+  }
+
+  public static void debug(List<Location> location) {
+    for (Location point : location) {
+      System.out.println(point.getLatitude() + "," + point.getLongitude() + ";");
+      // in sout form to easy copy paste in refclient
+    }
   }
 }

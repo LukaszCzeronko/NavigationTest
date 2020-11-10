@@ -16,40 +16,40 @@ public class CliProperties {
   @CommandLine.Option(
       names = {"-in", "-input"},
       description = "input file")
-  private String inputFile = "locations.json";
+  private final String inputFile = "locations.json";
 
   @CommandLine.Option(
       names = {"-u", "-unit"},
       description = "unit system: METRIC or IMPERIAL")
-  private Units units = Units.METRIC;
+  private final Units units = Units.METRIC;
 
   @CommandLine.Option(
       names = {"-s", "-speed"},
       description = "speed of a car")
-  private double speed = 90.0;
+  private final double speed = 90.0;
 
   @CommandLine.Option(
       names = {"-i", "-interval"},
       description = "interval rate")
-  private int interval = 180;
+  private final int interval = 180;
   // If path is given save file path localisation, in other case write file in main app folder
   @CommandLine.Option(
       names = {"-o", "-output"},
       description = "output file")
-  private String outputFile = "route.json";
+  private final String outputFile = "route.json";
 
   @CommandLine.Option(
       names = {"-c", "-config"},
       description = "output csv configuration path")
-  private String configPath = "configuration.json";
+  private final String configPath = "configuration.json";
 
   @CommandLine.Option(
       names = {"-r", "results"},
       description = "csv result file")
-  private String csvPath = "csvRouteRequest.csv";
+  private final String csvPath = "csvRouteRequest.csv";
 
   @CommandLine.Option(
       names = {"-d", "-debug"},
       description = "turn on debug mode")
-  private boolean debug = false;
+  private final boolean debug = false;
 }

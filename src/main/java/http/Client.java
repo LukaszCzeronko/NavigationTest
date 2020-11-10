@@ -22,8 +22,8 @@ public class Client {
   private String basePath;
   private RequestSpecification newRequestSpecification;
   private Response response;
-  private ByteArrayOutputStream responseOutputStream = new ByteArrayOutputStream();
-  private ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream();
+  private final ByteArrayOutputStream responseOutputStream = new ByteArrayOutputStream();
+  private final ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream();
 
   public Client() {
     RestAssured.baseURI = "https://route.ls.hereapi.com/routing";
@@ -57,24 +57,24 @@ public class Client {
 
   // send request with given queryParameters
   public Response sendRequest(boolean debug) {
-    newRequestSpecification= RestAssured.given();
+    newRequestSpecification = RestAssured.given();
     newRequestSpecification.queryParams(this.baseQueryParameters);
 
     //      ByteArrayOutputStream responseOutputStream = new ByteArrayOutputStream();
-      //      ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream();
-      //      PrintStream requestPs = new PrintStream(requestOutputStream, true);
-      //      PrintStream responsePs = new PrintStream(responseOutputStream, true);
-      //      RequestLoggingFilter requestLoggingFilter = new RequestLoggingFilter(requestPs);
-      //      ResponseLoggingFilter responseLoggingFilter = new ResponseLoggingFilter(responsePs);
-      //      newRequestSpecification.filters(requestLoggingFilter, responseLoggingFilter);
-      addFilters(debug);
+    //      ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream();
+    //      PrintStream requestPs = new PrintStream(requestOutputStream, true);
+    //      PrintStream responsePs = new PrintStream(responseOutputStream, true);
+    //      RequestLoggingFilter requestLoggingFilter = new RequestLoggingFilter(requestPs);
+    //      ResponseLoggingFilter responseLoggingFilter = new ResponseLoggingFilter(responsePs);
+    //      newRequestSpecification.filters(requestLoggingFilter, responseLoggingFilter);
+    addFilters(debug);
 
-      response = newRequestSpecification.request(Method.GET);
-      logDetails(debug);
-      //      String requestDetails = new String(requestOutputStream.toByteArray());
-      //      String responseDetails = new String(responseOutputStream.toByteArray());
-      //      log.info("request details: {}", requestDetails);
-      //      log.info("response details: {}", responseDetails);
+    response = newRequestSpecification.request(Method.GET);
+    logDetails(debug);
+    //      String requestDetails = new String(requestOutputStream.toByteArray());
+    //      String responseDetails = new String(responseOutputStream.toByteArray());
+    //      log.info("request details: {}", requestDetails);
+    //      log.info("response details: {}", responseDetails);
     return response;
   }
 

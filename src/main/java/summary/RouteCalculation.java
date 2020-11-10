@@ -1,6 +1,6 @@
 package summary;
 
-import calculation.CalculateCoordinates;
+import calculation.CalculateCoordinatesInterpolationFinal;
 import calculation.CalculateP2PDistance;
 import cli.CliProperties;
 import http.Client;
@@ -42,12 +42,15 @@ public class RouteCalculation {
       Response response = client.sendRequest(cliProperties.isDebug());
       locationPoint = ResponseUtils.getLocationPoint(response);
       CalculateP2PDistance calculateP2PDistance = new CalculateP2PDistance();
-      CalculateCoordinates calculateCoordinates = new CalculateCoordinates();
+      CalculateCoordinatesInterpolationFinal calculateCoordinatesInterpolationFinal =
+          new CalculateCoordinatesInterpolationFinal();
       locationPoint1 =
           calculateP2PDistance.calculateDistance(
               locationPoint, cliProperties.getMaxRouteLength(), cliProperties.getUnits(), step);
       List<Location> location;
-      location = calculateCoordinates.calculatePointsOnRoute((locationPoint1));
+      location =
+          calculateCoordinatesInterpolationFinal.calculatePointsOnRoute(
+              locationPoint1, cliProperties.isDebug());
       route.setLocation(location);
       route.setId(id);
       route.setLength(locationPoint1.getOverallDistance());

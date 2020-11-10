@@ -1,24 +1,21 @@
 package validation;
 
 
-import calculation.CalculateCoordinates;
-import calculation.Prototype;
-import cli.Units;
+import Utils.SoftAssert;
+import calculation.CalculateCoordinatesInterpolationRoutePoints;
+import calculation.CalculateCoordinatesInterpolationFinal;
 import model.Location;
 import model.LocationPoint;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
-public class CalculateCoordinatesTest {
+public class CalculateCoordinatesInterpolationRoutePointsTest {
 
     @Parameterized.Parameter(0)
     public TestObject testObject;
@@ -31,7 +28,7 @@ public class CalculateCoordinatesTest {
         Object[][] data =
                 new Object[][] {
                         {
-                                new TestObject(new Double[] {52.522105, 52.5230706,52.5235748,52.5238134}, new Double[] {13.416785, 13.4178257,13.4184051,13.4186437},new Double[]{33.26, 34.96, 31.32}, new Double[]{0.128,0.0680,0.31},0.1
+                                new TestObject(new Double[] {52.522105, 52.5230706,52.5235748,52.5238134}, new Double[] {13.416785, 13.4178257,13.4184051,13.4186437},new Double[]{33.26, 34.96, 31.32}, new Double[]{0.129,0.069,0.031},0.1
                                 ),new Result(new Location[]{new Location(52.522105,13.416785),new Location(52.5235748,13.4184051),new Location(52.5235748,13.4184051),new Location(52.5238134,13.4186437)})
                         },
 //                        {
@@ -54,7 +51,6 @@ public class CalculateCoordinatesTest {
 //                                new Result(new Location[]{new Location(53.9663379,14.9694148),new Location(53.9659381,14.9686146),new Location(53.9657373,14.9679619)})
 //                        },
 
-
                 };
         return Arrays.asList(data);
     }
@@ -62,21 +58,26 @@ public class CalculateCoordinatesTest {
     @Test
     public void calculateP2PDistanceTests() {
         LocationPoint locationPoint = generateLocationPoint(testObject);
-        CalculateCoordinates calculateCoordinates = new CalculateCoordinates();
-//    for(int j=0;j<calculateCoordinates.calculatePointsOnRoute(locationPoint).size();j++){
+        CalculateCoordinatesInterpolationFinal prototype= new CalculateCoordinatesInterpolationFinal();
+        CalculateCoordinatesInterpolationRoutePoints calculateCoordinatesInterpolationRoutePoints = new CalculateCoordinatesInterpolationRoutePoints();
+//        for(int j=0;j<prototype.calculatePointsOnRoutePrototype(locationPoint).size();j++){
 //
-//      System.out.println(calculateCoordinates.calculatePointsOnRoute(locationPoint).get(j).getLatitude()+","+calculateCoordinates.calculatePointsOnRoute(locationPoint).get(j).getLongitude()+";");
-//    }
-//        assertEquals(
-//                "Result:",
-//                result.locations,
-//                calculateCoordinates.calculatePointsOnRoute(locationPoint));
+//
+//     System.out.println(prototype.calculatePointsOnRoutePrototype(locationPoint).get(j).getLatitude()+","+prototype.calculatePointsOnRoutePrototype(locationPoint).get(j).getLongitude()+";");
+//        }
+    //        assertEquals(
+    //                "Result:",
+    //                result.locations,
+    //                calculateCoordinates.calculatePointsOnRoute(locationPoint));
 
-    Prototype prototype= new Prototype();
-        assertEquals(
+     //   SoftAssert softAssert= new SoftAssert();
+SoftAssert.equals(result.locations,prototype.calculatePointsOnRoute(locationPoint));
+   // System.out.println("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwa"+a);
+//        System.out.println(prototype.calculatePointsOnRoutePrototype(locationPoint));
+       assertEquals(
                 "Result:",
-                result.locations,
-                prototype.calculatePointsOnRoutePrototype(locationPoint));
+               result.locations,
+               prototype.calculatePointsOnRoute(locationPoint));
     }
 
     private LocationPoint generateLocationPoint(TestObject testObject) {
@@ -109,5 +110,14 @@ public class CalculateCoordinatesTest {
         public Result(Location[] location){
             this.locations.addAll(Arrays.asList(location));
         }
+
+        public List<Location> getLocations() {
+            return locations;
+        }
     }
+
+
+
+
+
 }
