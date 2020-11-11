@@ -32,9 +32,9 @@ public class Utilities {
   }
 
   public static long transformDegree(double degree) {
-    degree = (degree / 360.0000000) * 10000000;
+    degree = (degree / 360.000000000) * 1000000000;
     double c = Math.pow(2, 32);
-    degree = (degree * c) / 10000000;
+    degree = (degree * c) / 1000000000;
     long d = (long) degree;
     return d;
   }

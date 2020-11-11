@@ -29,12 +29,18 @@ public class CalculateCoordinatesInterpolationFinal {
 
       // get first route that length>step and aprox back
       if (step < currentDistance) {
+
         startPoint =
             new GlobalCoordinates(
                 locationPoint.getPointLatitude().get(routeIndex),
                 locationPoint.getPointLongitude().get(routeIndex));
         currentDistance = currentDistance - step;
-        double lackingDistance = step - locationPoint.getPointDistance().get(routeIndex - 1);
+        double lackingDistance;
+        if (routeIndex == 0) {
+          lackingDistance = step;
+        } else {
+          lackingDistance = step - locationPoint.getPointDistance().get(routeIndex - 1);
+        }
         double[] endBearing = new double[1];
         GlobalCoordinates dest =
             geoCalc.calculateEndingGlobalCoordinates(
@@ -63,7 +69,6 @@ public class CalculateCoordinatesInterpolationFinal {
         locationPoint.getPointAzimuth().set(routeIndex, newAzimuth);
         routeIndex = routeIndex - 1;
         if (currentDistance > step) {
-
           routeIndex = routeIndex + 1;
           while (currentDistance > step) {
             startPoint =
@@ -111,8 +116,8 @@ public class CalculateCoordinatesInterpolationFinal {
         }
       }
       if (originalRouteSize == routeIndex + 1) {
-        newCalculatedLat.add(locationPoint.getPointLatitude().get(routeIndex));
-        newCalculatedLong.add(locationPoint.getPointLongitude().get(routeIndex));
+        newCalculatedLat.add(locationPoint.getPointLatitude().get(routeIndex + 1));
+        newCalculatedLong.add(locationPoint.getPointLongitude().get(routeIndex + 1));
         break;
       }
     }
