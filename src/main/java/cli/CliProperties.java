@@ -40,7 +40,7 @@ public class CliProperties {
 
   @CommandLine.Option(
       names = {"-c", "-config"},
-      description = "output csv configuration path")
+      description = "input csv configuration path")
   private String configPath = "configuration.json";
 
   @CommandLine.Option(

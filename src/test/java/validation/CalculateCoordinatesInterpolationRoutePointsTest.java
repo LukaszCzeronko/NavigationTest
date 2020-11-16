@@ -1,8 +1,7 @@
 package validation;
 
 import Utils.SoftAssert;
-import calculation.CalculateCoordinatesInterpolationFinal;
-import calculation.CalculateCoordinatesInterpolationRoutePoints;
+import calculation.CalculateCoordinatesInterpolationHighAccuracy;
 import model.Location;
 import model.LocationPoint;
 import org.junit.Test;
@@ -160,13 +159,10 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
   @Test
   public void calculateP2PDistanceTests() {
     LocationPoint locationPoint = generateLocationPoint(testObject);
-    CalculateCoordinatesInterpolationFinal interpolation =
-        new CalculateCoordinatesInterpolationFinal();
+    CalculateCoordinatesInterpolationHighAccuracy interpolation =
+        new CalculateCoordinatesInterpolationHighAccuracy();
     SoftAssert.equals(
-        result.locations,
-        interpolation.calculatePointsOnRoute(locationPoint),
-        testCase,
-        threshold);
+        result.locations, interpolation.calculatePointsOnRoute(locationPoint), testCase, threshold);
   }
 
   private LocationPoint generateLocationPoint(TestObject testObject) {
@@ -202,9 +198,9 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
 
   static class Result {
     List<Location> locations = new ArrayList<>();
+
     public Result(Location[] location) {
       this.locations.addAll(Arrays.asList(location));
     }
-
   }
 }

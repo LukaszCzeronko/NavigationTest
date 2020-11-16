@@ -14,7 +14,7 @@ import java.util.Map;
 
 @Slf4j
 public class CalculateCoordinatesInterpolationRoutePoints {
-  public List<Location> calculatePointsOnRoute(LocationPoint locationPoint) {
+  public static List<Location> calculatePointsOnRoute(LocationPoint locationPoint) {
     Location location;
     List<Location> resultsCoordinates = new ArrayList<>();
     Map<Double, Double> newCalculatedCoordinates = new HashMap<>();
@@ -28,6 +28,9 @@ public class CalculateCoordinatesInterpolationRoutePoints {
     double cDist = 0;
     double cAng;
     double lowSum = 0;
+    GeodeticCalculator geoCalc = new GeodeticCalculator();
+    Ellipsoid reference = Ellipsoid.WGS84;
+    GlobalCoordinates startPoint;
     for (int i = 0; i < locationPoint.getPointDistance().size(); i++) {
       sDistance = sDistance + locationPoint.getPointDistance().get(i) - cDist;
       cDist = 0;
@@ -35,14 +38,10 @@ public class CalculateCoordinatesInterpolationRoutePoints {
         lowSum = sDistance - locationPoint.getPointDistance().get(i);
         cDist = locationPoint.getStep() - lowSum;
         cAng = locationPoint.getPointAzimuth().get(i);
-        GeodeticCalculator geoCalc = new GeodeticCalculator();
-        Ellipsoid reference = Ellipsoid.WGS84;
-        GlobalCoordinates startPoint;
         startPoint =
             new GlobalCoordinates(
                 locationPoint.getPointLatitude().get(i - 1),
                 locationPoint.getPointLongitude().get(i - 1));
-
         double[] endBearing = new double[1];
         GlobalCoordinates dest =
             geoCalc.calculateEndingGlobalCoordinates(
@@ -56,9 +55,8 @@ public class CalculateCoordinatesInterpolationRoutePoints {
         newCalculatedLong.add((locationPoint.getPointLongitude().get(i - 1)));
         --i;
       } else if ((i + 1) >= locationPoint.getPointDistance().size()) {
-        GeodeticCalculator geoCalc = new GeodeticCalculator();
-        Ellipsoid reference = Ellipsoid.WGS84;
-        GlobalCoordinates startPoint;
+        geoCalc = new GeodeticCalculator();
+        reference = Ellipsoid.WGS84;
         cAng = locationPoint.getPointAzimuth().get(i);
         startPoint =
             new GlobalCoordinates(

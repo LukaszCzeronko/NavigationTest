@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SoftAssert {
-
   public static void equals(List<Location> actual, List<Location> expected, String message,double threshold) {
     if (actual.size() != expected.size()) {
       System.err.println("Actual size :"+actual.size()+" is different than expected size: "+expected.size());

@@ -10,9 +10,9 @@ import utils.Utilities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CalculateCoordinatesInterpolationFinal {
-
-  public List<Location> calculatePointsOnRoute(LocationPoint locationPoint) {
+public class CalculateCoordinatesInterpolationHighAccuracy {
+  private static final int MULTIPLIER=1000;
+  public static List<Location> calculatePointsOnRoute(LocationPoint locationPoint) {
     Location location;
     List<Location> resultsCoordinates = new ArrayList<>();
     List<Double> newCalculatedLat = new ArrayList<>();
@@ -21,12 +21,11 @@ public class CalculateCoordinatesInterpolationFinal {
     newCalculatedLong.add(locationPoint.getPointLongitude().get(0));
     double step = locationPoint.getStep();
     double originalRouteSize = locationPoint.getPointDistance().size();
+    GeodeticCalculator geoCalc = new GeodeticCalculator();
+    Ellipsoid reference = Ellipsoid.WGS84;
+    GlobalCoordinates startPoint;
     for (int routeIndex = 0; routeIndex < originalRouteSize; routeIndex++) {
-      GeodeticCalculator geoCalc = new GeodeticCalculator();
-      Ellipsoid reference = Ellipsoid.WGS84;
-      GlobalCoordinates startPoint;
       double currentDistance = locationPoint.getPointDistance().get(routeIndex);
-
       // get first route that length>step and aprox back
       if (step < currentDistance) {
 
@@ -47,7 +46,7 @@ public class CalculateCoordinatesInterpolationFinal {
                 reference,
                 startPoint,
                 locationPoint.getPointAzimuth().get(routeIndex),
-                lackingDistance * 1000,
+                lackingDistance * MULTIPLIER,
                 endBearing);
         newCalculatedLat.add(dest.getLatitude());
         newCalculatedLong.add(dest.getLongitude());
@@ -81,7 +80,7 @@ public class CalculateCoordinatesInterpolationFinal {
                     reference,
                     startPoint,
                     locationPoint.getPointAzimuth().get(routeIndex),
-                    step * 1000,
+                    step * MULTIPLIER,
                     endBearing);
             newCalculatedLat.add(dest.getLatitude());
             newCalculatedLong.add(dest.getLongitude());

@@ -1,7 +1,5 @@
 package validation;
 
-import lombok.Getter;
-import lombok.Setter;
 import model.RequestConfig;
 import model.RequestConfigList;
 import org.junit.Test;
