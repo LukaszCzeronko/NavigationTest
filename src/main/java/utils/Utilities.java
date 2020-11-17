@@ -1,5 +1,6 @@
 package utils;
 
+import cli.Units;
 import lombok.extern.slf4j.Slf4j;
 import model.Location;
 import model.RequestConfigList;
@@ -114,25 +115,23 @@ public class Utilities {
     Ellipsoid reference = Ellipsoid.WGS84;
     GlobalPosition firstPoint;
     firstPoint = new GlobalPosition(lat1, lon1, 1);
-
     GlobalPosition secondPoint;
     secondPoint = new GlobalPosition(lat2, lon2, 1);
-
     GeodeticCurve geoCurve = geoCalc.calculateGeodeticCurve(reference, firstPoint, secondPoint);
     geoCalc.calculateGeodeticCurve(reference, firstPoint, secondPoint);
     return geoCurve.getAzimuth();
   }
 
-  public static double calculateP2PDistance(double lat1, double lon1, double lat2, double lon2) {
+  public static double calculateP2PDistance(
+      double lat1, double lon1, double lat2, double lon2, Units multiplier) {
     GeodeticCalculator geoCalc = new GeodeticCalculator();
     Ellipsoid reference = Ellipsoid.WGS84;
     GlobalPosition firstPoint;
     firstPoint = new GlobalPosition(lat1, lon1, 1);
-
     GlobalPosition secondPoint;
     secondPoint = new GlobalPosition(lat2, lon2, 1);
     GeodeticCurve geoCurve = geoCalc.calculateGeodeticCurve(reference, firstPoint, secondPoint);
-    double ellipseKilometers = geoCurve.getEllipsoidalDistance() / 1000.0;
+    double ellipseKilometers = geoCurve.getEllipsoidalDistance() / (1000.0 * multiplier.getUnit());
     geoCalc.calculateGeodeticCurve(reference, firstPoint, secondPoint);
     return ellipseKilometers;
   }

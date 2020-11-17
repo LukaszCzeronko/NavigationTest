@@ -50,7 +50,7 @@ public class RouteCalculation {
       List<Location> location;
       location =
           calculateCoordinatesInterpolationHighAccuracy.calculatePointsOnRoute(
-              locationPoint1, cliProperties.isDebug());
+              locationPoint1, cliProperties.getUnits(), cliProperties.isDebug());
       route.setLocation(location);
       route.setId(id);
       route.setLength(locationPoint1.getOverallDistance());

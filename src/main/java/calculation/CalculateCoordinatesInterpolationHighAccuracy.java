@@ -1,5 +1,6 @@
 package calculation;
 
+import cli.Units;
 import model.Location;
 import model.LocationPoint;
 import org.gavaghan.geodesy.Ellipsoid;
@@ -11,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CalculateCoordinatesInterpolationHighAccuracy {
-  private static final int MULTIPLIER=1000;
-  public static List<Location> calculatePointsOnRoute(LocationPoint locationPoint) {
+  private static final int MULTIPLIER = 1000;
+
+  public static List<Location> calculatePointsOnRoute(
+      LocationPoint locationPoint, Units multiplier) {
     Location location;
     List<Location> resultsCoordinates = new ArrayList<>();
     List<Double> newCalculatedLat = new ArrayList<>();
@@ -24,11 +27,11 @@ public class CalculateCoordinatesInterpolationHighAccuracy {
     GeodeticCalculator geoCalc = new GeodeticCalculator();
     Ellipsoid reference = Ellipsoid.WGS84;
     GlobalCoordinates startPoint;
+    double[] endBearing = new double[1];
     for (int routeIndex = 0; routeIndex < originalRouteSize; routeIndex++) {
       double currentDistance = locationPoint.getPointDistance().get(routeIndex);
       // get first route that length>step and aprox back
       if (step < currentDistance) {
-
         startPoint =
             new GlobalCoordinates(
                 locationPoint.getPointLatitude().get(routeIndex),
@@ -40,13 +43,12 @@ public class CalculateCoordinatesInterpolationHighAccuracy {
         } else {
           lackingDistance = step - locationPoint.getPointDistance().get(routeIndex - 1);
         }
-        double[] endBearing = new double[1];
         GlobalCoordinates dest =
             geoCalc.calculateEndingGlobalCoordinates(
                 reference,
                 startPoint,
                 locationPoint.getPointAzimuth().get(routeIndex),
-                lackingDistance * MULTIPLIER,
+                lackingDistance * MULTIPLIER * multiplier.getUnit(),
                 endBearing);
         newCalculatedLat.add(dest.getLatitude());
         newCalculatedLong.add(dest.getLongitude());
@@ -55,7 +57,8 @@ public class CalculateCoordinatesInterpolationHighAccuracy {
                 dest.getLatitude(),
                 dest.getLongitude(),
                 locationPoint.getPointLatitude().get(routeIndex + 1),
-                locationPoint.getPointLongitude().get(routeIndex + 1));
+                locationPoint.getPointLongitude().get(routeIndex + 1),
+                multiplier);
         double newAzimuth =
             Utilities.calculateP2PAzimuth(
                 dest.getLatitude(),
@@ -80,7 +83,7 @@ public class CalculateCoordinatesInterpolationHighAccuracy {
                     reference,
                     startPoint,
                     locationPoint.getPointAzimuth().get(routeIndex),
-                    step * MULTIPLIER,
+                    step * MULTIPLIER * multiplier.getUnit(),
                     endBearing);
             newCalculatedLat.add(dest.getLatitude());
             newCalculatedLong.add(dest.getLongitude());
@@ -90,7 +93,8 @@ public class CalculateCoordinatesInterpolationHighAccuracy {
                   dest.getLatitude(),
                   dest.getLongitude(),
                   locationPoint.getPointLatitude().get(routeIndex + 1),
-                  locationPoint.getPointLongitude().get(routeIndex + 1));
+                  locationPoint.getPointLongitude().get(routeIndex + 1),
+                  multiplier);
           newAzimuth =
               Utilities.calculateP2PAzimuth(
                   dest.getLatitude(),
@@ -129,9 +133,10 @@ public class CalculateCoordinatesInterpolationHighAccuracy {
     return resultsCoordinates;
   }
 
-  public List<Location> calculatePointsOnRoute(LocationPoint locationPoint, boolean debug) {
+  public List<Location> calculatePointsOnRoute(
+      LocationPoint locationPoint, Units units, boolean debug) {
     List<Location> resultsCoordinates;
-    resultsCoordinates = calculatePointsOnRoute(locationPoint);
+    resultsCoordinates = calculatePointsOnRoute(locationPoint, units);
 
     if (debug) {
       Utilities.debug(resultsCoordinates);

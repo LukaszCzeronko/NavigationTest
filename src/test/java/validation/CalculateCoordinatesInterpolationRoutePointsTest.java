@@ -2,6 +2,7 @@ package validation;
 
 import Utils.SoftAssert;
 import calculation.CalculateCoordinatesInterpolationHighAccuracy;
+import cli.Units;
 import model.Location;
 import model.LocationPoint;
 import org.junit.Test;
@@ -25,6 +26,7 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
   public Result result;
 
   private static final double threshold = 0.00001;
+  private static final Units units=Units.METRIC;
 
   @Parameterized.Parameters
   public static Collection<Object[]> data() {
@@ -162,7 +164,7 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
     CalculateCoordinatesInterpolationHighAccuracy interpolation =
         new CalculateCoordinatesInterpolationHighAccuracy();
     SoftAssert.equals(
-        result.locations, interpolation.calculatePointsOnRoute(locationPoint), testCase, threshold);
+        result.locations, interpolation.calculatePointsOnRoute(locationPoint,units), testCase, threshold);
   }
 
   private LocationPoint generateLocationPoint(TestObject testObject) {
@@ -195,10 +197,8 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
       this.step = step;
     }
   }
-
   static class Result {
     List<Location> locations = new ArrayList<>();
-
     public Result(Location[] location) {
       this.locations.addAll(Arrays.asList(location));
     }

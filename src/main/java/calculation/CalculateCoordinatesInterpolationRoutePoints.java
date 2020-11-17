@@ -30,6 +30,7 @@ public class CalculateCoordinatesInterpolationRoutePoints {
     double lowSum = 0;
     GeodeticCalculator geoCalc = new GeodeticCalculator();
     Ellipsoid reference = Ellipsoid.WGS84;
+    double[] endBearing = new double[1];
     GlobalCoordinates startPoint;
     for (int i = 0; i < locationPoint.getPointDistance().size(); i++) {
       sDistance = sDistance + locationPoint.getPointDistance().get(i) - cDist;
@@ -42,7 +43,6 @@ public class CalculateCoordinatesInterpolationRoutePoints {
             new GlobalCoordinates(
                 locationPoint.getPointLatitude().get(i - 1),
                 locationPoint.getPointLongitude().get(i - 1));
-        double[] endBearing = new double[1];
         GlobalCoordinates dest =
             geoCalc.calculateEndingGlobalCoordinates(
                 reference, startPoint, cAng, cDist, endBearing);
@@ -55,14 +55,11 @@ public class CalculateCoordinatesInterpolationRoutePoints {
         newCalculatedLong.add((locationPoint.getPointLongitude().get(i - 1)));
         --i;
       } else if ((i + 1) >= locationPoint.getPointDistance().size()) {
-        geoCalc = new GeodeticCalculator();
-        reference = Ellipsoid.WGS84;
         cAng = locationPoint.getPointAzimuth().get(i);
         startPoint =
             new GlobalCoordinates(
                 newCalculatedLat.get(newCalculatedLat.size() - 1),
                 newCalculatedLong.get(newCalculatedLong.size() - 1));
-        double[] endBearing = new double[1];
         GlobalCoordinates dest =
             geoCalc.calculateEndingGlobalCoordinates(
                 reference, startPoint, cAng, sDistance, endBearing);
@@ -78,7 +75,6 @@ public class CalculateCoordinatesInterpolationRoutePoints {
       }
     }
     for (int i = 0; i < newCalculatedLat.size(); i++) {
-      System.out.println(newCalculatedLat.get(i) + "," + newCalculatedLong.get(i) + ";");
       location = new Location();
       location.setLatitude(newCalculatedLat.get(i));
       location.setLongitude(newCalculatedLong.get(i));

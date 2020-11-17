@@ -2,7 +2,7 @@ package cli;
 
 public enum Units {
   METRIC(1.00),
-  IMPERIAL(1.621371192);
+  IMPERIAL(1.609344);
   private final double unit;
 
   Units(double unit) {

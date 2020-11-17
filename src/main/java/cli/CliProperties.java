@@ -6,10 +6,16 @@ import picocli.CommandLine;
 @Getter
 public class CliProperties {
 
-  @CommandLine.Parameters(index = "0", description = "number-of-routes")
+  @CommandLine.Option(
+      names = {"-rn"},
+      required = true,
+      description = "number-of-routes")
   private int numberOfRoutes;
 
-  @CommandLine.Parameters(index = "1", description = "max-route-length")
+  @CommandLine.Option(
+      names = {"-ml"},
+      required = true,
+      description = "max-route-length")
   private double maxRouteLength;
   // input file must be in resource folder. If there is no option read from
   // src\main\resources\locations.json

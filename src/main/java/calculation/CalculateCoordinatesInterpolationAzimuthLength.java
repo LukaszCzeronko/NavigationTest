@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CalculateCoordinatesInterpolationAzimuthLength {
-  private static final int MULTIPLIER=1000;
+  private static final int MULTIPLIER = 1000;
+
   public static List<Location> calculatePointsOnRoutePrototype(LocationPoint locationPoint) {
     Location location;
     List<Location> resultsCoordinates = new ArrayList<>();
@@ -23,6 +24,7 @@ public class CalculateCoordinatesInterpolationAzimuthLength {
     lastIndexUsed.add(0);
     GeodeticCalculator geoCalc = new GeodeticCalculator();
     Ellipsoid reference = Ellipsoid.WGS84;
+    double[] endBearing = new double[1];
     double step = locationPoint.getStep();
     int maxLocationIndex = locationPoint.getPointDistance().size();
     for (int oldPosition = 0; oldPosition < maxLocationIndex; oldPosition++) {
@@ -49,7 +51,6 @@ public class CalculateCoordinatesInterpolationAzimuthLength {
                   newCalculatedLat.get(newCalculatedLat.size() - 1),
                   newCalculatedLong.get(newCalculatedLong.size() - 1));
           oldPositionLength = oldPositionLength - step;
-          double[] endBearing = new double[1];
           GlobalCoordinates dest =
               geoCalc.calculateEndingGlobalCoordinates(
                   reference, startPoint, averageAngle, step * MULTIPLIER, endBearing);
