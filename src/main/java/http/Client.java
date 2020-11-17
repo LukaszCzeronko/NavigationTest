@@ -17,9 +17,13 @@ import static utils.Utilities.splitAndRevertString;
 
 @Slf4j
 public class Client {
-  private Map<String, String> baseQueryParameters = new HashMap<String, String>();
+  private final Map<String, String> baseQueryParameters = new HashMap<String, String>();
   private String baseURI;
   private String basePath;
+  private RequestSpecification newRequestSpecification;
+  private Response response;
+  private final ByteArrayOutputStream responseOutputStream = new ByteArrayOutputStream();
+  private final ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream();
 
   public Client() {
     RestAssured.baseURI = "https://route.ls.hereapi.com/routing";
@@ -36,7 +40,7 @@ public class Client {
   }
 
   public void setUpWayPoints(String... point) {
-    System.out.println(point.length);
+    //    System.out.println(point.length);
     for (int i = 0; i < point.length; i++) {
       point[i] = point[i].replaceAll("\\[", "").replaceAll("\\]", "");
       point[i] = splitAndRevertString(point[i]);
@@ -52,23 +56,51 @@ public class Client {
   }
 
   // send request with given queryParameters
-  public Response sendRequest() {
-    RequestSpecification newRequestSpecification = RestAssured.given();
-    newRequestSpecification.log().parameters();
+  public Response sendRequest(boolean debug) {
+    newRequestSpecification = RestAssured.given();
     newRequestSpecification.queryParams(this.baseQueryParameters);
-    newRequestSpecification.log().parameters();
-    ByteArrayOutputStream responseOutputStream = new ByteArrayOutputStream();
-    ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream();
-    PrintStream requestPs = new PrintStream(requestOutputStream, true);
-    PrintStream responsePs = new PrintStream(responseOutputStream, true);
-    RequestLoggingFilter requestLoggingFilter = new RequestLoggingFilter(requestPs);
-    ResponseLoggingFilter responseLoggingFilter = new ResponseLoggingFilter(responsePs);
-    newRequestSpecification.filters(requestLoggingFilter, responseLoggingFilter);
-    Response response = newRequestSpecification.request(Method.GET);
-    String requestDetails = new String(requestOutputStream.toByteArray());
-    String responseDetails = new String(responseOutputStream.toByteArray());
-    log.info("request details: {}", requestDetails);
-    // log.info("response details: {}",responseDetails);
+
+    //      ByteArrayOutputStream responseOutputStream = new ByteArrayOutputStream();
+    //      ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream();
+    //      PrintStream requestPs = new PrintStream(requestOutputStream, true);
+    //      PrintStream responsePs = new PrintStream(responseOutputStream, true);
+    //      RequestLoggingFilter requestLoggingFilter = new RequestLoggingFilter(requestPs);
+    //      ResponseLoggingFilter responseLoggingFilter = new ResponseLoggingFilter(responsePs);
+    //      newRequestSpecification.filters(requestLoggingFilter, responseLoggingFilter);
+    addFilters(debug);
+
+    response = newRequestSpecification.request(Method.GET);
+    logDetails(debug);
+    //      String requestDetails = new String(requestOutputStream.toByteArray());
+    //      String responseDetails = new String(responseOutputStream.toByteArray());
+    //      log.info("request details: {}", requestDetails);
+    //      log.info("response details: {}", responseDetails);
     return response;
+  }
+
+  private void addFilters(boolean debug) {
+    if (debug) {
+      PrintStream requestPs = new PrintStream(requestOutputStream, true);
+      PrintStream responsePs = new PrintStream(responseOutputStream, true);
+      RequestLoggingFilter requestLoggingFilter = new RequestLoggingFilter(requestPs);
+      ResponseLoggingFilter responseLoggingFilter = new ResponseLoggingFilter(responsePs);
+      newRequestSpecification.filters(requestLoggingFilter, responseLoggingFilter);
+    }
+  }
+
+  private void logDetails(boolean debug) {
+
+    log.info(
+        "Request coordinates: {},{} Response status code: {}",
+        this.baseQueryParameters.get("waypoint0"),
+        this.baseQueryParameters.get("waypoint1"),
+        response.getStatusLine());
+
+    if (debug) {
+      String requestDetails = new String(requestOutputStream.toByteArray());
+      String responseDetails = new String(responseOutputStream.toByteArray());
+      log.info("request details: {}", requestDetails);
+      log.info("response details: {}", responseDetails);
+    }
   }
 }

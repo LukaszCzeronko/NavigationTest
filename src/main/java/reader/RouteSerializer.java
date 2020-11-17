@@ -9,12 +9,12 @@ import java.util.List;
 
 @Slf4j
 public class RouteSerializer {
-  private ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   public String serialize(List<Route> route) {
     String jsonString = "";
     try {
-      jsonString = objectMapper.writeValueAsString(route);
+      jsonString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(route);
     } catch (IOException e) {
       log.error("There was a error while serializing Route object: ", e.getMessage());
     }

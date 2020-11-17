@@ -6,25 +6,31 @@ import picocli.CommandLine;
 @Getter
 public class CliProperties {
 
-  @CommandLine.Parameters(index = "0", description = "number-of-routes")
+  @CommandLine.Option(
+      names = {"-rn"},
+      required = true,
+      description = "number-of-routes")
   private int numberOfRoutes;
 
-  @CommandLine.Parameters(index = "1", description = "max-route-length")
+  @CommandLine.Option(
+      names = {"-ml"},
+      required = true,
+      description = "max-route-length")
   private double maxRouteLength;
   // input file must be in resource folder. If there is no option read from
   // src\main\resources\locations.json
   @CommandLine.Option(
-      names = {"-in", "input"},
+      names = {"-in", "-input"},
       description = "input file")
   private String inputFile = "locations.json";
 
   @CommandLine.Option(
-      names = {"-u", "unit"},
+      names = {"-u", "-unit"},
       description = "unit system: METRIC or IMPERIAL")
   private Units units = Units.METRIC;
 
   @CommandLine.Option(
-      names = {"-s", "speed"},
+      names = {"-s", "-speed"},
       description = "speed of a car")
   private double speed = 90.0;
 
@@ -37,4 +43,19 @@ public class CliProperties {
       names = {"-o", "-output"},
       description = "output file")
   private String outputFile = "route.json";
+
+  @CommandLine.Option(
+      names = {"-c", "-config"},
+      description = "input csv configuration path")
+  private String configPath = "configuration.json";
+
+  @CommandLine.Option(
+      names = {"-r", "results"},
+      description = "csv result file")
+  private String csvPath = "csvRouteRequest.csv";
+
+  @CommandLine.Option(
+      names = {"-d", "-debug"},
+      description = "turn on debug mode")
+  private boolean debug = false;
 }

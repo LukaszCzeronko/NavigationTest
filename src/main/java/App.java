@@ -1,7 +1,11 @@
 import cli.CliProperties;
 import lombok.extern.slf4j.Slf4j;
+import model.Route;
 import picocli.CommandLine;
-import summaryPackage.RouteCalculation;
+import summary.RouteCalculation;
+import summary.SpecificRequestCsv;
+
+import java.util.List;
 
 @Slf4j
 @CommandLine.Command(
@@ -17,7 +21,9 @@ public class App {
     try {
       CommandLine.ParseResult parseResult = new CommandLine(cliProperties).parseArgs(args);
       if (!CommandLine.printHelpIfRequested(parseResult)) {
-        routeCalculation.calculatePoints(cliProperties);
+        List<Route> routePoints = routeCalculation.calculatePoints(cliProperties);
+        SpecificRequestCsv specificRequestCsv = new SpecificRequestCsv();
+        specificRequestCsv.createSpecificCsv(routePoints, cliProperties);
       }
     } catch (CommandLine.ParameterException ex) {
       System.err.println(ex.getMessage());

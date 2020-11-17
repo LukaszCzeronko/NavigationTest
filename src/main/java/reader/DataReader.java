@@ -8,7 +8,6 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +15,7 @@ import java.util.Random;
 
 @Slf4j
 public class DataReader {
+  private static final String cityFilePath = "src\\main\\resources\\cities.json";
   // read json type file and setup random localisation for given number of locations
   public List<String> readFormattedJsonFile(int numberOfLocation, String sourceFile) {
     List<Integer> ex = new ArrayList<>();
@@ -47,7 +47,7 @@ public class DataReader {
   // read and parse pure json file with cities
   public List<String> readUnformattedJsonFile() {
     List<String> coordinates = new ArrayList<>();
-    try (FileReader reader = new FileReader("src\\main\\resources\\cities.json")) {
+    try (FileReader reader = new FileReader(cityFilePath)) {
       JSONParser parser = new JSONParser();
       JSONObject obj = (JSONObject) parser.parse(reader);
       JSONArray obj2 = (JSONArray) obj.get("features");
@@ -63,7 +63,6 @@ public class DataReader {
     } catch (ParseException e) {
       log.error("An error occurred.", e);
     }
-    // return whole json file
     return coordinates;
   }
 
@@ -81,13 +80,19 @@ public class DataReader {
     }
     return schema.toString();
   }
-  // write json file
-  public void writeFile(String fileContent, String path) {
-    try (FileWriter myWriter = new FileWriter(path)) {
-      myWriter.write(fileContent);
-      log.info("Successfully wrote to the file.");
+
+  public String readRequest(String schemaPath) {
+    JSONArray schema = null;
+    try (FileReader reader = new FileReader(schemaPath)) {
+      JSONParser parser = new JSONParser();
+      schema = (JSONArray) parser.parse(reader);
+    } catch (FileNotFoundException e) {
+      log.error("An error occurred.", e);
     } catch (IOException e) {
       log.error("An error occurred.", e);
+    } catch (ParseException e) {
+      log.error("An error occurred.", e);
     }
+    return schema.toString();
   }
 }
