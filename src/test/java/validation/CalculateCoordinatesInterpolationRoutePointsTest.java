@@ -25,8 +25,8 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
   @Parameterized.Parameter(2)
   public Result result;
 
-  private static final double threshold = 0.00001;
-  private static final Units units=Units.METRIC;
+  private static final double THRESHOLD = 0.00001;
+  private static final Units UNITS_SYSTEM = Units.METRIC;
 
   @Parameterized.Parameters
   public static Collection<Object[]> data() {
@@ -164,7 +164,10 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
     CalculateCoordinatesInterpolationHighAccuracy interpolation =
         new CalculateCoordinatesInterpolationHighAccuracy();
     SoftAssert.equals(
-        result.locations, interpolation.calculatePointsOnRoute(locationPoint,units), testCase, threshold);
+        result.locations,
+        interpolation.calculatePointsOnRoute(locationPoint, UNITS_SYSTEM),
+        testCase,
+        THRESHOLD);
   }
 
   private LocationPoint generateLocationPoint(TestObject testObject) {
@@ -197,8 +200,10 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
       this.step = step;
     }
   }
+
   static class Result {
     List<Location> locations = new ArrayList<>();
+
     public Result(Location[] location) {
       this.locations.addAll(Arrays.asList(location));
     }
