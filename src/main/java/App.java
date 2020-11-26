@@ -2,8 +2,8 @@ import cli.CliProperties;
 import lombok.extern.slf4j.Slf4j;
 import model.Route;
 import picocli.CommandLine;
+import summary.CreateResponseCSV;
 import summary.RouteCalculation;
-import summary.SpecificRequestCsv;
 
 import java.util.List;
 
@@ -22,8 +22,8 @@ public class App {
       CommandLine.ParseResult parseResult = new CommandLine(cliProperties).parseArgs(args);
       if (!CommandLine.printHelpIfRequested(parseResult)) {
         List<Route> routePoints = routeCalculation.calculatePoints(cliProperties);
-        SpecificRequestCsv specificRequestCsv = new SpecificRequestCsv();
-        specificRequestCsv.createSpecificCsv(routePoints, cliProperties);
+        CreateResponseCSV createResponseCSV = new CreateResponseCSV();
+        createResponseCSV.createSpecificCsv(routePoints, cliProperties);
       }
     } catch (CommandLine.ParameterException ex) {
       System.err.println(ex.getMessage());

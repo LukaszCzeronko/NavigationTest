@@ -1,11 +1,13 @@
 package calculation;
 
+import cli.Units;
 import lombok.extern.slf4j.Slf4j;
 import model.Location;
 import model.LocationPoint;
 import org.gavaghan.geodesy.Ellipsoid;
 import org.gavaghan.geodesy.GeodeticCalculator;
 import org.gavaghan.geodesy.GlobalCoordinates;
+import utils.Utilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +16,7 @@ import java.util.Map;
 
 @Slf4j
 public class CalculateCoordinatesInterpolationRoutePoints {
-  public static List<Location> calculatePointsOnRoute(LocationPoint locationPoint) {
+  public static List<Location> calculatePointsOnRoute(LocationPoint locationPoint, Units units) {
     Location location;
     List<Location> resultsCoordinates = new ArrayList<>();
     Map<Double, Double> newCalculatedCoordinates = new HashMap<>();
@@ -45,7 +47,7 @@ public class CalculateCoordinatesInterpolationRoutePoints {
                 locationPoint.getPointLongitude().get(i - 1));
         GlobalCoordinates dest =
             geoCalc.calculateEndingGlobalCoordinates(
-                reference, startPoint, cAng, cDist, endBearing);
+                reference, startPoint, cAng, cDist * units.getUnit(), endBearing);
         sDistance = 0;
         locationPoint.getPointLatitude().set(i - 1, dest.getLatitude());
         locationPoint.getPointLongitude().set(i - 1, dest.getLongitude());
@@ -62,7 +64,7 @@ public class CalculateCoordinatesInterpolationRoutePoints {
                 newCalculatedLong.get(newCalculatedLong.size() - 1));
         GlobalCoordinates dest =
             geoCalc.calculateEndingGlobalCoordinates(
-                reference, startPoint, cAng, sDistance, endBearing);
+                reference, startPoint, cAng, sDistance * units.getUnit(), endBearing);
         locationPoint.getPointLatitude().set(i - 1, dest.getLatitude());
         locationPoint.getPointLongitude().set(i - 1, dest.getLongitude());
         newCalculatedCoordinates.put(
@@ -79,6 +81,17 @@ public class CalculateCoordinatesInterpolationRoutePoints {
       location.setLatitude(newCalculatedLat.get(i));
       location.setLongitude(newCalculatedLong.get(i));
       resultsCoordinates.add(location);
+    }
+    return resultsCoordinates;
+  }
+
+  public static List<Location> calculatePointsOnRoute(
+      LocationPoint locationPoint, Units units, boolean debug) {
+    List<Location> resultsCoordinates;
+    resultsCoordinates = calculatePointsOnRoute(locationPoint, units);
+
+    if (debug) {
+      Utilities.debug(resultsCoordinates);
     }
     return resultsCoordinates;
   }

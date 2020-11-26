@@ -58,4 +58,9 @@ public class CliProperties {
       names = {"-d", "-debug"},
       description = "turn on debug mode")
   private boolean debug = false;
+
+  @CommandLine.Option(
+      names = {"-a", "-algorithm"},
+      description = "chose type of algorithm to Interpolate route")
+  private InterpolationType interpolationType = InterpolationType.HA;
 }

@@ -7,3 +7,4 @@
 /route.json
 /csvRoute.csv
 /csvRouteRequest.csv
+/src/main/resources/credentials.properties

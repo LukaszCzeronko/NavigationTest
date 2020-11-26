@@ -1,7 +1,6 @@
 package calculation;
 
 import cli.Units;
-import lombok.extern.slf4j.Slf4j;
 import model.LocationPoint;
 import org.gavaghan.geodesy.Ellipsoid;
 import org.gavaghan.geodesy.GeodeticCalculator;
@@ -11,7 +10,6 @@ import org.gavaghan.geodesy.GlobalPosition;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
 public class CalculateP2PDistance {
   public LocationPoint calculateDistance(
       LocationPoint locationPoint, double maxRouteLength, Units multiplier, double step) {

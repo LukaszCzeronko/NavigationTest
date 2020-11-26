@@ -43,10 +43,6 @@ public class RequestConfig {
 
   public RequestConfig() {}
 
-  protected boolean canEqual(final Object other) {
-    return other instanceof RequestConfig;
-  }
-
   public String toString() {
     return parameter
         + "tp="

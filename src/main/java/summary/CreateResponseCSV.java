@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class SpecificRequestCsv {
-  public void createSpecificCsv(List<Route> routes, CliProperties cliProperties) {
+public class CreateResponseCSV {
+  public static void createSpecificCsv(List<Route> routes, CliProperties cliProperties) {
     List<String> id = new ArrayList<>();
     DataReader dataReader = new DataReader();
     String config;

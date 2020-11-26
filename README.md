@@ -15,7 +15,7 @@ The main task of our project is to interpolate points on map with given accuracy
     * ```-c, -config ``` input for route distribution json file. Default: configuration.json
     * ```-r, -results ``` csv file with query string. Default: csvRouteRequest.csv
     * ```-d, -debug ``` debug option, show full response and calculated points. Default: false
- 
+    * ```-a, -algorithm ``` algorithm method for route interpolation: HA, AZ ,RP. Highly recommended HA. Default: HA
  # Run
  Set Maven program arguments:
  
