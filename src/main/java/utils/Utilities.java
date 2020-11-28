@@ -24,6 +24,7 @@ public class Utilities {
   private static final int TRANSFORM_RATIO_DIVIDER = 100;
   private static final double DISTANCE_RATIO_DIVIDER = 1000.0;
   private static final String CREDENTIALS_SOURCE = "credentials.properties";
+  private static final int ID_LENGTH = 10;
 
   public static String splitAndRevertString(String strToReverse) {
     String str1, str2;
@@ -48,7 +49,7 @@ public class Utilities {
 
   public static String generateId() {
     StringBuilder generatedId = new StringBuilder();
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < ID_LENGTH; i++) {
       int index = (int) (ALPHABET.length() * Math.random());
       generatedId.append(ALPHABET.charAt(index));
     }
@@ -155,9 +156,10 @@ public class Utilities {
     InputStream stream = loader.getResourceAsStream(CREDENTIALS_SOURCE);
     try {
       prop.load(stream);
+      ValidationUtils.checkIfEmpty("Credentials properties are empty", prop);
       properties = (Map) prop;
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error("Can't load credentials file", e);
     }
     return properties;
   }
