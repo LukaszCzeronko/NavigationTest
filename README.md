@@ -1,6 +1,9 @@
 # Navigation - brief summary.
 The main task of our project is to interpolate points on map with given accuracy based on car speed and sampling time.
 
+# Credentials
+Add ``credentials.properties`` in resource directory with ```app_key``` code.
+To get free api key sign up in: https://developer.here.com/
 # Program arguments
 - mandatory:
     * ```-rn``` number of random routes.
@@ -15,7 +18,7 @@ The main task of our project is to interpolate points on map with given accuracy
     * ```-c, -config ``` input for route distribution json file. Default: configuration.json
     * ```-r, -results ``` csv file with query string. Default: csvRouteRequest.csv
     * ```-d, -debug ``` debug option, show full response and calculated points. Default: false
- 
+    * ```-a, -algorithm ``` algorithm method for route interpolation: HA, AZ ,RP. Highly recommended HA. Default: HA
  # Run
  Set Maven program arguments:
  

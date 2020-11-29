@@ -16,13 +16,9 @@ import java.util.List;
 
 @RunWith(Parameterized.class)
 public class CalculateCoordinatesInterpolationRoutePointsTest {
-  @Parameterized.Parameter(0)
-  public String testCase;
+  @Parameterized.Parameter() public TestObject testObject;
 
   @Parameterized.Parameter(1)
-  public TestObject testObject;
-
-  @Parameterized.Parameter(2)
   public Result result;
 
   private static final double THRESHOLD = 0.00001;
@@ -33,7 +29,6 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
     Object[][] data =
         new Object[][] {
           {
-            "TC 1.0",
             new TestObject(
                 new Double[] {53.9663379, 53.9661956, 53.966099, 53.9659381, 53.9657373},
                 new Double[] {14.9694148, 14.9692369, 14.9690545, 14.9686146, 14.9679619},
@@ -48,7 +43,6 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
                 })
           },
           {
-            "TC 1.1",
             new TestObject(
                 new Double[] {
                   54.8011393, 54.8011029, 54.800899, 54.8006308, 54.7983241, 54.7962749
@@ -68,9 +62,7 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
                   new Location(54.7962749, 22.1691763)
                 })
           },
-          //
           {
-            "TC 1.2",
             new TestObject(
                 new Double[] {
                   52.8119027, 52.8117621, 52.8122342, 52.8128564, 52.8160965, 52.8174869,
@@ -90,7 +82,6 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
                 })
           },
           {
-            "TC 1.3",
             new TestObject(
                 new Double[] {
                   54.0321672, 54.0437651, 54.0511787, 54.0542579, 54.0596545, 54.0608968
@@ -112,7 +103,6 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
                 })
           },
           {
-            "TC 1.4",
             new TestObject(
                 new Double[] {
                   42.4300146, 42.4300897, 42.4255621, 42.4118185, 42.3816919, 42.3286113
@@ -132,7 +122,6 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
                 })
           },
           {
-            "TC 1.5",
             new TestObject(
                 new Double[] {
                   60.3099532, 60.3141153, 60.3263032, 60.3323436, 60.3344142, 60.338695
@@ -161,12 +150,10 @@ public class CalculateCoordinatesInterpolationRoutePointsTest {
   @Test
   public void calculateP2PDistanceTests() {
     LocationPoint locationPoint = generateLocationPoint(testObject);
-    CalculateCoordinatesInterpolationHighAccuracy interpolation =
-        new CalculateCoordinatesInterpolationHighAccuracy();
     SoftAssert.equals(
         result.locations,
-        interpolation.calculatePointsOnRoute(locationPoint, UNITS_SYSTEM),
-        testCase,
+        CalculateCoordinatesInterpolationHighAccuracy.calculatePointsOnRoute(
+            locationPoint, UNITS_SYSTEM),
         THRESHOLD);
   }
 

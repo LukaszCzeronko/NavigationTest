@@ -7,6 +7,7 @@ import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import lombok.extern.slf4j.Slf4j;
+import utils.Utilities;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -40,7 +41,6 @@ public class Client {
   }
 
   public void setUpWayPoints(String... point) {
-    //    System.out.println(point.length);
     for (int i = 0; i < point.length; i++) {
       point[i] = point[i].replaceAll("\\[", "").replaceAll("\\]", "");
       point[i] = splitAndRevertString(point[i]);
@@ -49,32 +49,18 @@ public class Client {
   }
 
   public void setUpBaseQueryParameters() {
-    this.baseQueryParameters.put("apiKey", "yCnlRpa6JipucjrFo3woY4fFYPN51gjjHhYd7cPVDmQ");
+    this.baseQueryParameters.putAll(Utilities.getCredentials());
     this.baseQueryParameters.put("mode", "fastest;car;traffic:disabled");
     this.baseQueryParameters.put("routeattributes", "sh,summaryByCountry");
     this.baseQueryParameters.put("returnelevation", "true");
   }
 
-  // send request with given queryParameters
   public Response sendRequest(boolean debug) {
     newRequestSpecification = RestAssured.given();
     newRequestSpecification.queryParams(this.baseQueryParameters);
-
-    //      ByteArrayOutputStream responseOutputStream = new ByteArrayOutputStream();
-    //      ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream();
-    //      PrintStream requestPs = new PrintStream(requestOutputStream, true);
-    //      PrintStream responsePs = new PrintStream(responseOutputStream, true);
-    //      RequestLoggingFilter requestLoggingFilter = new RequestLoggingFilter(requestPs);
-    //      ResponseLoggingFilter responseLoggingFilter = new ResponseLoggingFilter(responsePs);
-    //      newRequestSpecification.filters(requestLoggingFilter, responseLoggingFilter);
     addFilters(debug);
-
     response = newRequestSpecification.request(Method.GET);
     logDetails(debug);
-    //      String requestDetails = new String(requestOutputStream.toByteArray());
-    //      String responseDetails = new String(responseOutputStream.toByteArray());
-    //      log.info("request details: {}", requestDetails);
-    //      log.info("response details: {}", responseDetails);
     return response;
   }
 
@@ -89,7 +75,6 @@ public class Client {
   }
 
   private void logDetails(boolean debug) {
-
     log.info(
         "Request coordinates: {},{} Response status code: {}",
         this.baseQueryParameters.get("waypoint0"),

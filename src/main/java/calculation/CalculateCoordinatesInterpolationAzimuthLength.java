@@ -1,5 +1,6 @@
 package calculation;
 
+import cli.Units;
 import model.Location;
 import model.LocationPoint;
 import org.gavaghan.geodesy.Ellipsoid;
@@ -13,7 +14,7 @@ import java.util.List;
 public class CalculateCoordinatesInterpolationAzimuthLength {
   private static final int MULTIPLIER = 1000;
 
-  public static List<Location> calculatePointsOnRoutePrototype(LocationPoint locationPoint) {
+  public static List<Location> calculatePointsOnRoute(LocationPoint locationPoint, Units units) {
     Location location;
     List<Location> resultsCoordinates = new ArrayList<>();
     List<Double> newCalculatedLat = new ArrayList<>();
@@ -45,7 +46,6 @@ public class CalculateCoordinatesInterpolationAzimuthLength {
             averageAngle = oldPositionAzimuth;
           }
           lastIndexUsed.add(oldPosition);
-
           startPoint =
               new GlobalCoordinates(
                   newCalculatedLat.get(newCalculatedLat.size() - 1),
@@ -53,7 +53,11 @@ public class CalculateCoordinatesInterpolationAzimuthLength {
           oldPositionLength = oldPositionLength - step;
           GlobalCoordinates dest =
               geoCalc.calculateEndingGlobalCoordinates(
-                  reference, startPoint, averageAngle, step * MULTIPLIER, endBearing);
+                  reference,
+                  startPoint,
+                  averageAngle,
+                  step * MULTIPLIER * units.getUnit(),
+                  endBearing);
           newCalculatedLat.add(dest.getLatitude());
           newCalculatedLong.add(dest.getLongitude());
           extraDistance = oldPositionLength;
@@ -85,6 +89,17 @@ public class CalculateCoordinatesInterpolationAzimuthLength {
       location.setLatitude(newCalculatedLat.get(i));
       location.setLongitude(newCalculatedLong.get(i));
       resultsCoordinates.add(location);
+    }
+    return resultsCoordinates;
+  }
+
+  public static List<Location> calculatePointsOnRoute(
+      LocationPoint locationPoint, Units units, boolean debug) {
+    List<Location> resultsCoordinates;
+    resultsCoordinates = calculatePointsOnRoute(locationPoint, units);
+
+    if (debug) {
+      Utilities.debug(resultsCoordinates);
     }
     return resultsCoordinates;
   }

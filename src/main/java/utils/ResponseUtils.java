@@ -16,13 +16,13 @@ import java.util.List;
 
 @Slf4j
 public class ResponseUtils {
-  private static final String jsonShapePath = "response.route[0].shape";
+  private static final String JSON_SHAPE_PATH = "response.route[0].shape";
 
   public static LocationPoint getLocationPoint(Response response) {
     List<Double> posLat = new ArrayList<>();
     List<Double> posLong = new ArrayList<>();
     List<Double> elevation = new ArrayList<>();
-    List<String> jsonResponse = response.jsonPath().getList(jsonShapePath);
+    List<String> jsonResponse = response.jsonPath().getList(JSON_SHAPE_PATH);
     for (int i = 0; i < jsonResponse.size(); i++) {
       double dLat;
       double dLong;

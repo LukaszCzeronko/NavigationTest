@@ -12,12 +12,19 @@ import validation.ValidationUtils;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.InputStream;
+import java.util.*;
 
 @Slf4j
 public class Utilities {
   private static final String ALPHABET = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+  private static final int SECONDS_IN_HOUR = 3600;
+  private static final double TRANSFORM_MULTIPLIER = 360.000000000;
+  private static final int TRANSFORM_DIVIDER = 1000000000;
+  private static final int TRANSFORM_RATIO_DIVIDER = 100;
+  private static final double DISTANCE_RATIO_DIVIDER = 1000.0;
+  private static final String CREDENTIALS_SOURCE = "credentials.properties";
+  private static final int ID_LENGTH = 10;
 
   public static String splitAndRevertString(String strToReverse) {
     String str1, str2;
@@ -28,21 +35,21 @@ public class Utilities {
   }
 
   public static double calculateStep(double speed, int time) {
-    double distance = speed * (double) time / 3600;
+    double distance = speed * (double) time / SECONDS_IN_HOUR;
     return distance;
   }
 
   public static long transformDegree(double degree) {
-    degree = (degree / 360.000000000) * 1000000000;
+    degree = (degree / TRANSFORM_MULTIPLIER) * TRANSFORM_DIVIDER;
     double c = Math.pow(2, 32);
-    degree = (degree * c) / 1000000000;
+    degree = (degree * c) / TRANSFORM_DIVIDER;
     long d = (long) degree;
     return d;
   }
 
   public static String generateId() {
     StringBuilder generatedId = new StringBuilder();
-    for (int i = 0; i < 17; i++) {
+    for (int i = 0; i < ID_LENGTH; i++) {
       int index = (int) (ALPHABET.length() * Math.random());
       generatedId.append(ALPHABET.charAt(index));
     }
@@ -66,14 +73,13 @@ public class Utilities {
   public static void writeFile(String fileContent, String path) {
     try (FileWriter myWriter = new FileWriter(path)) {
       myWriter.write(fileContent);
-      log.info("Successfully wrote to the file.");
     } catch (IOException e) {
       log.error("An error occurred.", e);
     }
   }
 
   public static int calculatePercent(int numberOfRoutes, int ratio) {
-    float result = ((numberOfRoutes * ratio) / 100);
+    float result = ((numberOfRoutes * ratio) / TRANSFORM_RATIO_DIVIDER);
     return (int) result;
   }
 
@@ -131,15 +137,30 @@ public class Utilities {
     GlobalPosition secondPoint;
     secondPoint = new GlobalPosition(lat2, lon2, 1);
     GeodeticCurve geoCurve = geoCalc.calculateGeodeticCurve(reference, firstPoint, secondPoint);
-    double ellipseKilometers = geoCurve.getEllipsoidalDistance() / (1000.0 * multiplier.getUnit());
+    double ellipseKilometers =
+        geoCurve.getEllipsoidalDistance() / (DISTANCE_RATIO_DIVIDER * multiplier.getUnit());
     geoCalc.calculateGeodeticCurve(reference, firstPoint, secondPoint);
     return ellipseKilometers;
   }
 
   public static void debug(List<Location> location) {
     for (Location point : location) {
-      System.out.println(point.getLatitude() + "," + point.getLongitude() + ";");
-      // in sout form to easy copy paste in refclient
+      log.info(point.getLatitude() + "," + point.getLongitude() + ";");
     }
+  }
+
+  public static Map<String, String> getCredentials() {
+    Properties prop = new Properties();
+    ClassLoader loader = Thread.currentThread().getContextClassLoader();
+    Map<String, String> properties = new HashMap<>();
+    InputStream stream = loader.getResourceAsStream(CREDENTIALS_SOURCE);
+    try {
+      prop.load(stream);
+      ValidationUtils.checkIfEmpty("Credentials properties are empty", prop);
+      properties = (Map) prop;
+    } catch (IOException e) {
+      log.error("Can't load credentials file", e);
+    }
+    return properties;
   }
 }

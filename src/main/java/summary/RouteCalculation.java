@@ -1,6 +1,5 @@
 package summary;
 
-import calculation.CalculateCoordinatesInterpolationHighAccuracy;
 import calculation.CalculateP2PDistance;
 import cli.CliProperties;
 import http.Client;
@@ -42,15 +41,12 @@ public class RouteCalculation {
       Response response = client.sendRequest(cliProperties.isDebug());
       locationPoint = ResponseUtils.getLocationPoint(response);
       CalculateP2PDistance calculateP2PDistance = new CalculateP2PDistance();
-      CalculateCoordinatesInterpolationHighAccuracy calculateCoordinatesInterpolationHighAccuracy =
-          new CalculateCoordinatesInterpolationHighAccuracy();
       locationPoint1 =
           calculateP2PDistance.calculateDistance(
               locationPoint, cliProperties.getMaxRouteLength(), cliProperties.getUnits(), step);
       List<Location> location;
       location =
-          calculateCoordinatesInterpolationHighAccuracy.calculatePointsOnRoute(
-              locationPoint1, cliProperties.getUnits(), cliProperties.isDebug());
+          cliProperties.getInterpolationType().getInterpolation(locationPoint1, cliProperties);
       route.setLocation(location);
       route.setId(id);
       route.setLength(locationPoint1.getOverallDistance());

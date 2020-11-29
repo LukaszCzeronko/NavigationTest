@@ -133,7 +133,7 @@ public class CalculateCoordinatesInterpolationHighAccuracy {
     return resultsCoordinates;
   }
 
-  public List<Location> calculatePointsOnRoute(
+  public static List<Location> calculatePointsOnRoute(
       LocationPoint locationPoint, Units units, boolean debug) {
     List<Location> resultsCoordinates;
     resultsCoordinates = calculatePointsOnRoute(locationPoint, units);
